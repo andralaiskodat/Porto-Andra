@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { FaShieldAlt } from 'react-icons/fa';
-import bangzenLogo from '../assets/images/BGZENBGIJObulat.png';
+import bangzenLogo from '../assets/images/LogoAndra.png';
 import { useNavbar } from '../contexts/NavbarContext';
 import { useAdmin } from '../contexts/AdminContext';
 import AdminLogin from './AdminLogin';
@@ -124,7 +124,7 @@ const Header = () => {
               }}
             >
               {/* =========== REFACTORED NAVIGATION =========== */}
-              <nav className="container mx-auto flex items-center justify-between flex-wrap pb-4 px-4">
+              <nav className="container mx-auto flex items-center justify-between flex-wrap pb-3 px-4">
                 
                 {/* --- MOBILE HEADER --- */}
                 <div className="w-full flex items-center justify-between md:hidden">
@@ -132,7 +132,7 @@ const Header = () => {
                   <a href="#home" className="flex items-center gap-3">
                     <img src={bangzenLogo} alt="Bangzen Logo" className="h-12 w-12 flex-shrink-0" />
                     <div>
-                      <h1 className="font-moderniz text-sm text-[#00ffdc] whitespace-nowrap">Fransisko Andrade Laiskodat</h1>
+                      <h1 className="font-moderniz text-sm text-[#0077ff] whitespace-nowrap">Fransisko Andrade Laiskodat</h1>
                       <p className="font-moderniz text-[9px] text-[#000754]" style={{ textShadow: '0.5px 0.5px 0 #00ffdc, -0.5px -0.5px 0 #00ffdc, 0.5px -0.5px 0 #00ffdc, -0.5px 0.5px 0 #00ffdc' }}>
                         Let's see the awesome Experience
                       </p>
@@ -156,8 +156,8 @@ const Header = () => {
                   <a href="#home" className="flex items-center gap-3">
                     <img src={bangzenLogo} alt="Bangzen Logo" className="h-12 w-12" />
                     <div className="block">
-                      <h1 className="font-moderniz text-base text-[#00ffdc]">Fransisko Andrade Laiskodat</h1>
-                      <p className="font-moderniz text-[10px] text-[#000754]" style={{ textShadow: '0.5px 0.5px 0 #00ffdc, -0.5px -0.5px 0 #00ffdc, 0.5px -0.5px 0 #00ffdc, -0.5px 0.5px 0 #00ffdc' }}>
+                      <h1 className="font-moderniz text-base text-[#2d81e0]">Fransisko Andrade Laiskodat</h1>
+                      <p className="font-moderniz text-[12px] text-[#000754]" style={{ textShadow: '0.5px 0.5px 0 #2d81e0, -0.5px -0.5px 0 #2d81e0, 0.5px -0.5px 0 #2d81e0, -0.5px 0.5px 0 #2d81e0' }}>
                         Let's see the awesome Experience
                       </p>
                     </div>

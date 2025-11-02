@@ -32,8 +32,8 @@ function App() {
 
   // Data untuk card statistik
   const stats = [
-    { icon: <FaCode />, value: "13", title: "TOTAL PROJECTS", description: "Innovative web solutions crafted" },
-    { icon: <FaCertificate />, value: "13", title: "CERTIFICATES", description: "Professional skills validated" },
+    { icon: <FaCode />, value: "6", title: "TOTAL PROJECTS", description: "Innovative web solutions crafted" },
+    { icon: <FaCertificate />, value: "6", title: "CERTIFICATES", description: "Skills validated" },
     { icon: <FaGlobe />, value: "3", title: "YEARS OF EXPERIENCE", description: "Continuous learning journey" },
   ];
 
@@ -162,13 +162,18 @@ function App() {
                   <p className="text-2xl text-gray-300 font-moderniz my" style={{ textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc" }}>Hello, I'm</p>
                   <h3 className="text-4xl font-bold text-white my-2 font-moderniz" style={{ textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc" }}>Fransisko Andrade Laiskodat</h3>
                   <p className="text-white/80 leading-relaxed mt-4 font-cascadia text-justify">
-                    Saya adalah mahasiswa Teknik Informatika di Universitas Indo Global Mandiri Palembang yang memiliki minat besar dalam pengembangan Front-End dan teknologi web modern. Saya selalu bersemangat untuk belajar hal baru dan menciptakan solusi digital yang inovatif.
+                    Mahasiswa semester 7 Program Studi S1 Informatika di Universitas Amikom Yogyakarta dengan minat
+                    kuat dan pengalaman dalam pengembangan web serta data mining. Memiliki pengalaman berorganisasi,
+                    terbiasa bekerja dalam tim, dan berkomitmen untuk memberikan kontribusi terbaik. Berorientasi pada
+                    pembelajaran berkelanjutan, memiliki kemampuan komunikasi yang efektif, pemecahan masalah, serta
+                    dedikasi tinggi terhadap kualitas kerja. Antusias mengembangkan karier di bidang Full Stack Web
+                    Development dan Data Mining.
                   </p>
                   <div className="my-6 bg-slate-900/50 border-l-4 border-[#00ffdc] p-4 rounded-r-lg italic text-white/70 font-cascadia">
                     "Whoever strives shall succeed."
                   </div>
                   <div className="flex flex-row sm:flex-row gap-4 mt-8 justify-center md:justify-start items-center">
-                    <ButtonMovingBorder as="a" href="/cv.pdf" download duration={3000} borderRadius="0.75rem" className="bg-slate-900/[0.8] border border-slate-800 text-white font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-[0_0_24px_8px_#40ffaa]">
+                    <ButtonMovingBorder as="a" href="cvandra.pdf" download duration={3000} borderRadius="0.75rem" className="bg-slate-900/[0.8] border border-slate-800 text-white font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-[0_0_24px_8px_#40ffaa]">
                       <FaDownload /> Download CV
                     </ButtonMovingBorder>
                     <ButtonMovingBorder as="a" href="#projects" duration={3000} borderRadius="0.75rem" className="bg-slate-900/[0.8] border border-slate-800 text-white font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-[0_0_24px_8px_#40ffaa]">
