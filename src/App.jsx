@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 // Tambahkan FaCube untuk ikon tombol
 import { FaGithub, FaInstagram, FaLinkedin, FaDownload, FaBriefcase, FaCode, FaCertificate, FaGlobe, FaArrowRight, FaCube } from 'react-icons/fa';
 import ProfileCard from './components/ProfileCard/ProfileCard';
-import ZAINFIX from './assets/images/ZAINFIX.png';
+import ANDRA from './assets/images/ANDRA.jpg';
 import { IconCloud } from './components/IconCloud';
 import Spline from '@splinetool/react-spline';
 import { VelocityScroll } from './components/VelocityScroll';
