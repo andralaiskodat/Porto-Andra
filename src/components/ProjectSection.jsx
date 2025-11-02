@@ -61,7 +61,7 @@ const dummyProjects = [
 ];
 
 // ===================================
-// DATA SERTIFIKAT ZAIN AHMAD FAHREZI
+// DATA SERTIFIKAT Fransisko Andrade Laiskodat
 // ===================================
 const userCertificates = [
     {
