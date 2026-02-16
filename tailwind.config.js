@@ -9,10 +9,12 @@ export default {
       fontFamily: {
         'moderniz': ['Moderniz', 'sans-serif'],
         'bauhaus': ['Bauhaus93', 'sans-serif'],
+        'cascadia': ['Cascadia Code', 'monospace'],
       },
       animation: {
         shadowFade: 'shadowFade 5s infinite ease-in-out',
         gradient: 'gradient 8s linear infinite',
+        'spin-slow': 'spin 8s linear infinite',
       },
       keyframes: {
         shadowFade: {

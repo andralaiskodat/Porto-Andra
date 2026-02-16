@@ -9,6 +9,7 @@ import { AnimatedGradientTextDemo } from './components/AnimatedGradientTextDemo'
 import Skills from './components/Skills';
 import { ButtonMovingBorder } from './components/MovingBorderButton';
 import { motion } from "framer-motion";
+import FotoProfile from './components/FotoProfile';
 // Tambahkan FaCube untuk ikon tombol
 import { FaGithub, FaInstagram, FaLinkedin, FaDownload, FaBriefcase, FaCode, FaCertificate, FaGlobe, FaArrowRight, FaCube } from 'react-icons/fa';
 import ProfileCard from './components/ProfileCard/ProfileCard';
@@ -65,9 +66,9 @@ function App() {
           {/* MAIN CONTENT */}
           <main className="relative z-10 px-8 max-w-7xl mx-auto">
             {/* BAGIAN HERO */}
-            <section id="home" className="flex flex-col md:flex-row items-center gap-10 pt-20 pb-16 lg:pt-0 lg:pb-20">
+            <section id="home" className="flex flex-col md:flex-row items-center gap-10 pt-40 pb-16 lg:pt-40 lg:pb-20">
               {/* Blok Teks */}
-              <div className="flex-1 text-white space-y-6 pt-16 md:pt-40 order-last md:order-none">
+              <div className="flex-1 text-white space-y-6 pt-10 md:pt-18 order-last md:order-none">
                 {/* ... konten teks hero ... */}
                 <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}>
                     <AnimatedGradientTextDemo />
@@ -98,12 +99,10 @@ function App() {
                 </motion.div>
               </div>
 
-              {/* 3. Render Lanyard secara kondisional */}
-              {/* <div className="hidden lg:flex flex-1 justify-center h-[600px] w-full order-first lg:order-none">
-                {is3dEnabled && (
-                  <Lanyard position={[0, 0, 15]} gravity={[0, -40, 0]} fov={18} transparent={true} />
-                )}
-              </div> */}
+              {/* FOTO PROFIL - Menggantikan Lanyard yang di-comment */}
+              <div className="flex-1 flex justify-center items-center order-first md:order-none">
+                <FotoProfile />
+              </div>
             </section>
 
             {/* BAGIAN ABOUT ME BARU */}

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaGithub, 
-  FaInstagram, 
+  FaInstagram,
+  FaLinkedin, 
   FaTiktok, 
   FaPaperPlane, 
   FaUser, 
@@ -148,6 +149,13 @@ const Contact = () => {
       color: 'from-pink-500 to-purple-600',
       hoverColor: 'hover:shadow-pink-500/25'
     },
+    {
+      name: 'LinkedIn',
+      icon: <FaLinkedin />,
+      url: 'https://www.linkedin.com/in/fransisko',
+      color: 'from-blue-600 to-blue-800',
+      hoverColor: 'hover:shadow-blue-500/25'
+    }
   ];
 
   return (
