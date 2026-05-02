@@ -15,7 +15,7 @@ import {
   FaCheck,
   FaPlus
 } from 'react-icons/fa';
-import { useAdmin } from '../contexts/AdminContext';
+import { useAdmin } from '../../contexts/AdminContext';
 
 const AdminComments = ({ isOpen, onClose }) => {
   const [comments, setComments] = useState([]);

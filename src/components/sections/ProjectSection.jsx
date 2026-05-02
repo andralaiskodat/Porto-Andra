@@ -12,7 +12,7 @@ import {
 import { PiCodeBold } from "react-icons/pi";
 import { LuBadge } from "react-icons/lu";
 import { LiaLayerGroupSolid } from "react-icons/lia";
-import { useNavbar } from '../contexts/NavbarContext';
+import { useNavbar } from '../../contexts/NavbarContext';
 
 // ===================================
 // DATA PROYEK (CONTOH)

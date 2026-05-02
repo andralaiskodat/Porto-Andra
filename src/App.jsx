@@ -1,24 +1,22 @@
 // src/App.jsx
 import React, { useState } from 'react'; // Impor useState
-import Header from './components/Header';
-import Squares from './components/Squares';
-import TextGenerateEffect from "./components/text-generate-effect";
-import GradientText from './components/GradientText';
-import { AnimatedGradientTextDemo } from './components/AnimatedGradientTextDemo';
-//import Lanyard from './components/Lanyard/Lanyard';
-import Skills from './components/Skills';
-import { ButtonMovingBorder } from './components/MovingBorderButton';
+import Header from './components/sections/Header';
+import Squares from './components/ui/Squares';
+import TextGenerateEffect from "./components/ui/text-generate-effect";
+import GradientText from './components/ui/GradientText';
+import { AnimatedGradientTextDemo } from './components/ui/AnimatedGradientTextDemo';
+import Skills from './components/sections/Skills';
+import { ButtonMovingBorder } from './components/ui/MovingBorderButton';
 import { motion } from "framer-motion";
-import FotoProfile from './components/FotoProfile';
+import FotoProfile from './components/sections/FotoProfile';
 // Tambahkan FaCube untuk ikon tombol
 import { FaGithub, FaInstagram, FaLinkedin, FaDownload, FaBriefcase, FaCode, FaCertificate, FaGlobe, FaArrowRight, FaCube } from 'react-icons/fa';
-import ProfileCard from './components/ProfileCard/ProfileCard';
 import ANDRA from './assets/images/ANDRA.jpg';
-import { IconCloud } from './components/IconCloud';
+import { IconCloud } from './components/ui/IconCloud';
 import Spline from '@splinetool/react-spline';
-import { VelocityScroll } from './components/VelocityScroll';
-import ProjectSection from './components/ProjectSection';
-import Contact from './components/Contact';
+import { VelocityScroll } from './components/ui/VelocityScroll';
+import ProjectSection from './components/sections/ProjectSection';
+import Contact from './components/sections/Contact';
 import { NavbarProvider } from './contexts/NavbarContext';
 import { AdminProvider } from './contexts/AdminContext';
 
@@ -161,18 +159,18 @@ function App() {
                   <p className="text-2xl text-gray-300 font-moderniz my" style={{ textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc" }}>Hello, I'm</p>
                   <h3 className="text-4xl font-bold text-white my-2 font-moderniz" style={{ textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc" }}>Fransisko Andrade Laiskodat</h3>
                   <p className="text-white/80 leading-relaxed mt-4 font-cascadia text-justify">
-                    Mahasiswa semester 7 Program Studi S1 Informatika di Universitas Amikom Yogyakarta dengan minat
-                    kuat dan pengalaman dalam pengembangan web serta data mining. Memiliki pengalaman berorganisasi,
-                    terbiasa bekerja dalam tim, dan berkomitmen untuk memberikan kontribusi terbaik. Berorientasi pada
-                    pembelajaran berkelanjutan, memiliki kemampuan komunikasi yang efektif, pemecahan masalah, serta
-                    dedikasi tinggi terhadap kualitas kerja. Antusias mengembangkan karier di bidang Full Stack Web
-                    Development dan Data Mining.
+                    Lulusan S1 Informatika dari Universitas Amikom Yogyakarta dengan fokus pada pengembangan web dan
+                    data analysis. Memiliki pengalaman dalam membangun aplikasi web serta mengolah dan menganalisis
+                    data untuk menghasilkan solusi berbasis teknologi. Terbiasa bekerja secara kolaboratif maupun mandiri
+                    dengan kemampuan komunikasi, analitis, dan problem solving yang baik. Berorientasi pada hasil, adaptif
+                    terhadap teknologi baru, serta memiliki komitmen tinggi terhadap pengembangan diri. Siap berkontribusi
+                    sebagai Full Stack Web Developer atau Data Analyst
                   </p>
                   <div className="my-6 bg-slate-900/50 border-l-4 border-[#00ffdc] p-4 rounded-r-lg italic text-white/70 font-cascadia">
                     "Whoever strives shall succeed."
                   </div>
                   <div className="flex flex-row sm:flex-row gap-4 mt-8 justify-center md:justify-start items-center">
-                    <ButtonMovingBorder as="a" href="cvandra.pdf" download duration={3000} borderRadius="0.75rem" className="bg-slate-900/[0.8] border border-slate-800 text-white font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-[0_0_24px_8px_#40ffaa]">
+                    <ButtonMovingBorder as="a" href="/certificates/CV Andra.pdf" download="CV Andra.pdf" duration={3000} borderRadius="0.75rem" className="bg-slate-900/[0.8] border border-slate-800 text-white font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-[0_0_24px_8px_#40ffaa]">
                       <FaDownload /> Download CV
                     </ButtonMovingBorder>
                     <ButtonMovingBorder as="a" href="#projects" duration={3000} borderRadius="0.75rem" className="bg-slate-900/[0.8] border border-slate-800 text-white font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-[0_0_24px_8px_#40ffaa]">

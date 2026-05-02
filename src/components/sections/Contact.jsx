@@ -16,9 +16,9 @@ import {
   FaCog
 } from 'react-icons/fa';
 import { SiTiktok } from 'react-icons/si';
-import AdminMessages from './AdminMessages';
-import AdminLogin from './AdminLogin';
-import { useAdmin } from '../contexts/AdminContext';
+import AdminMessages from '../admin/AdminMessages';
+import AdminLogin from '../admin/AdminLogin';
+import { useAdmin } from '../../contexts/AdminContext';
 
 // JSON file untuk menyimpan comments
 const COMMENTS_FILE = '/comments.json';

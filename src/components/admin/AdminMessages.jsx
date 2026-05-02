@@ -14,7 +14,7 @@ import {
   FaClock,
   FaShieldAlt
 } from 'react-icons/fa';
-import { useAdmin } from '../contexts/AdminContext';
+import { useAdmin } from '../../contexts/AdminContext';
 
 const AdminMessages = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([]);

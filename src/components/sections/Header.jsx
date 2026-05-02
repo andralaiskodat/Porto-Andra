@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { FaShieldAlt } from 'react-icons/fa';
-import bangzenLogo from '../assets/images/LogoAndra.png';
-import { useNavbar } from '../contexts/NavbarContext';
-import { useAdmin } from '../contexts/AdminContext';
-import AdminLogin from './AdminLogin';
-import AdminMessages from './AdminMessages';
-import AdminComments from './AdminComments';
+import bangzenLogo from '../../assets/images/LogoAndra.png';
+import { useNavbar } from '../../contexts/NavbarContext';
+import { useAdmin } from '../../contexts/AdminContext';
+import AdminLogin from '../admin/AdminLogin';
+import AdminMessages from '../admin/AdminMessages';
+import AdminComments from '../admin/AdminComments';
 
 const CLIP_PATH =
   'polygon(0 0, 100% 0, 100% 80%, 68% 80%, 64% 100%, 36% 100%, 32% 80%, 0 80%)';

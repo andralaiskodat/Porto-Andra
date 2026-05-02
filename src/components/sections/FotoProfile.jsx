@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import ANDRA from '../assets/images/ANDRA.jpg';
+import ANDRA from '../../assets/images/ANDRA.jpg';
 
 const FotoProfile = () => {
   return (

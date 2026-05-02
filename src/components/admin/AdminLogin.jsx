@@ -10,7 +10,7 @@ import {
   FaExclamationTriangle,
   FaClock
 } from 'react-icons/fa';
-import { useAdmin } from '../contexts/AdminContext';
+import { useAdmin } from '../../contexts/AdminContext';
 
 const AdminLogin = ({ isOpen, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
-import Preloader from './components/Preloader.jsx'; // Impor Preloader
+import Preloader from './components/ui/Preloader.jsx'; // Impor Preloader
 import './index.css';
 
 /**
