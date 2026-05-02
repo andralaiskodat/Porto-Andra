@@ -31,7 +31,7 @@ function App() {
 
   // Data untuk card statistik
   const stats = [
-    { icon: <FaCode />, value: "6", title: "TOTAL PROJECTS", description: "Innovative web solutions crafted" },
+    { icon: <FaCode />, value: "7", title: "TOTAL PROJECTS", description: "Innovative web solutions crafted" },
     { icon: <FaCertificate />, value: "6", title: "CERTIFICATES", description: "Skills validated" },
     { icon: <FaGlobe />, value: "3", title: "YEARS OF EXPERIENCE", description: "Continuous learning journey" },
   ];

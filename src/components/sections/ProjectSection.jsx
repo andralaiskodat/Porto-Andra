@@ -43,6 +43,14 @@ const dummyProjects = [
     category: "Web/Apps",
   },
   {
+    title: "DiBisnis.in - Platform Kasir Digital untuk UMKM Kuliner",
+    description: "Kelola penjualan, inventori, dan promosikan bisnis kuliner Anda secara online dengan mudah, cepat, dan gratis.",
+    tech: ["Next.js", "TailwindCSS", "TypeScript","PostgreSQL"],
+    link: "https://dibisnis-in.vercel.app/",
+    image: "/certificate-images/DiBisnisin.png",
+    category: "Web/Apps",
+  },
+  {
     title: "Brosur Iklan Produk",
     description: "Brosur iklan produk dengan desain menarik dan informatif.",
     tech: ["Canva", "Photoshop"],
