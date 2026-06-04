@@ -159,12 +159,14 @@ function App() {
                   <p className="text-2xl text-gray-300 font-moderniz my" style={{ textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc" }}>Hello, I'm</p>
                   <h3 className="text-4xl font-bold text-white my-2 font-moderniz" style={{ textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc" }}>Fransisko Andrade Laiskodat</h3>
                   <p className="text-white/80 leading-relaxed mt-4 font-cascadia text-justify">
-                    Lulusan S1 Informatika dari Universitas Amikom Yogyakarta dengan fokus pada pengembangan web dan
-                    data analysis. Memiliki pengalaman dalam membangun aplikasi web serta mengolah dan menganalisis
-                    data untuk menghasilkan solusi berbasis teknologi. Terbiasa bekerja secara kolaboratif maupun mandiri
-                    dengan kemampuan komunikasi, analitis, dan problem solving yang baik. Berorientasi pada hasil, adaptif
-                    terhadap teknologi baru, serta memiliki komitmen tinggi terhadap pengembangan diri. Siap berkontribusi
-                    sebagai Full Stack Web Developer atau Data Analyst
+                    Bachelor of Informatics graduate from Amikom University Yogyakarta with a focus on web development
+                    and data analysis. Experienced in building web applications and processing as well as analyzing data to
+                    create technology-based solutions. A Full Stack Developer specializing in Front End Development,
+                    experienced in developing modern, responsive, and interactive web interfaces using the latest web
+                    technologies. Able to work both collaboratively and independently with strong communication, analytical,
+                    and problem-solving skills. Result-oriented, adaptive to new technologies, and highly committed to
+                    continuous self-development. Ready to contribute as a Front End Developer, Full Stack Web Developer,
+                    or Data Analyst.
                   </p>
                   <div className="my-6 bg-slate-900/50 border-l-4 border-[#00ffdc] p-4 rounded-r-lg italic text-white/70 font-cascadia">
                     "Whoever strives shall succeed."

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   FaComment,
   FaComments,
-  FaUser, 
-  FaCalendar, 
-  FaTrash, 
+  FaUser,
+  FaCalendar,
+  FaTrash,
   FaThumbsUp,
   FaTimes,
   FaSignOutAlt,
@@ -28,7 +28,7 @@ const AdminComments = ({ isOpen, onClose }) => {
     name: '',
     message: ''
   });
-  
+
   const { logout, getSessionTimeRemaining, extendSession } = useAdmin();
 
   // Load comments from localStorage and fallback to JSON
@@ -67,7 +67,7 @@ const AdminComments = ({ isOpen, onClose }) => {
       const minutes = Math.floor(remaining / (1000 * 60));
       const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
       setSessionTime(`${minutes}:${String(seconds).padStart(2, '0')}`);
-      
+
       // Auto logout when session expires
       if (remaining <= 0) {
         handleLogout();
@@ -102,14 +102,14 @@ const AdminComments = ({ isOpen, onClose }) => {
 
   const saveEdit = () => {
     const updatedComments = comments.map(comment =>
-      comment.id === editingComment 
+      comment.id === editingComment
         ? { ...comment, message: editText, edited: true }
         : comment
     );
     saveComments(updatedComments);
     setEditingComment(null);
     setEditText('');
-    
+
     // Update selected comment if it's the one being edited
     if (selectedComment && selectedComment.id === editingComment) {
       setSelectedComment({ ...selectedComment, message: editText, edited: true });
@@ -143,17 +143,17 @@ const AdminComments = ({ isOpen, onClose }) => {
   // Update likes
   const updateLikes = (commentId, increment) => {
     const updatedComments = comments.map(comment =>
-      comment.id === commentId 
+      comment.id === commentId
         ? { ...comment, likes: Math.max(0, comment.likes + increment) }
         : comment
     );
     saveComments(updatedComments);
-    
+
     // Update selected comment if it's the one being updated
     if (selectedComment && selectedComment.id === commentId) {
-      setSelectedComment({ 
-        ...selectedComment, 
-        likes: Math.max(0, selectedComment.likes + increment) 
+      setSelectedComment({
+        ...selectedComment,
+        likes: Math.max(0, selectedComment.likes + increment)
       });
     }
   };
@@ -225,7 +225,7 @@ const AdminComments = ({ isOpen, onClose }) => {
             </div>
 
             {/* Logout Button */}
-            <button 
+            <button
               onClick={handleLogout}
               className="bg-orange-500/20 hover:bg-orange-500/30 backdrop-blur-md p-3 rounded-full border border-orange-400/30 transition-all duration-300 group"
               title="Logout"
@@ -234,7 +234,7 @@ const AdminComments = ({ isOpen, onClose }) => {
             </button>
 
             {/* Close Button */}
-            <button 
+            <button
               onClick={onClose}
               className="bg-red-500/20 hover:bg-red-500/30 backdrop-blur-md p-3 rounded-full border border-red-400/30 transition-all duration-300 group"
             >
@@ -260,9 +260,8 @@ const AdminComments = ({ isOpen, onClose }) => {
                     animate={{ opacity: 1, y: 0 }}
                     whileHover={{ scale: 1.02 }}
                     onClick={() => setSelectedComment(comment)}
-                    className={`p-4 rounded-xl cursor-pointer transition-all duration-300 border bg-slate-800/50 border-slate-600/30 hover:bg-slate-700/50 ${
-                      selectedComment?.id === comment.id ? 'ring-2 ring-purple-400' : ''
-                    }`}
+                    className={`p-4 rounded-xl cursor-pointer transition-all duration-300 border bg-slate-800/50 border-slate-600/30 hover:bg-slate-700/50 ${selectedComment?.id === comment.id ? 'ring-2 ring-purple-400' : ''
+                      }`}
                   >
                     <div className="flex items-start gap-3">
                       <img
@@ -342,7 +341,7 @@ const AdminComments = ({ isOpen, onClose }) => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                       {/* Like Controls */}
                       <button
@@ -352,7 +351,7 @@ const AdminComments = ({ isOpen, onClose }) => {
                       >
                         <FaThumbsUp className="text-green-300 group-hover:text-green-200 text-sm" />
                       </button>
-                      
+
                       <button
                         onClick={() => updateLikes(selectedComment.id, -1)}
                         className="bg-red-500/20 hover:bg-red-500/30 p-2 rounded-full border border-red-400/30 transition-all duration-300 group"
@@ -446,7 +445,7 @@ const AdminComments = ({ isOpen, onClose }) => {
               onClick={(e) => e.stopPropagation()}
             >
               <h3 className="text-xl font-bold text-white mb-4">Add New Comment</h3>
-              
+
               <div className="space-y-4">
                 <input
                   type="text"
@@ -455,14 +454,14 @@ const AdminComments = ({ isOpen, onClose }) => {
                   onChange={(e) => setNewComment(prev => ({ ...prev, name: e.target.value }))}
                   className="w-full p-3 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300"
                 />
-                
+
                 <textarea
                   placeholder="Comment message"
                   value={newComment.message}
                   onChange={(e) => setNewComment(prev => ({ ...prev, message: e.target.value }))}
                   className="w-full h-32 p-3 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 resize-none"
                 />
-                
+
                 <div className="flex gap-3">
                   <button
                     onClick={addComment}
@@ -471,7 +470,7 @@ const AdminComments = ({ isOpen, onClose }) => {
                   >
                     <FaCheck /> Add Comment
                   </button>
-                  
+
                   <button
                     onClick={() => setIsAddingComment(false)}
                     className="bg-slate-600/20 hover:bg-slate-600/30 px-4 py-3 rounded-xl border border-slate-500/30 text-slate-300 hover:text-slate-200 transition-all duration-300"

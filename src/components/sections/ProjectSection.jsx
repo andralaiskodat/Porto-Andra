@@ -18,11 +18,11 @@ import { useNavbar } from '../../contexts/NavbarContext';
 // DATA PROYEK (CONTOH)
 // ===================================
 const dummyProjects = [
-    {
+  {
     title: "Landing Page Bakmi Pak Sandiyo",
     description: "Website landing page untuk Bakmi Pak Sandiyo, menampilkan menu, lokasi, dan kontak.",
     tech: ["Html", "CSS", "BootStrap", "Framer Motion"],
-    link: "https://www.bakmipaksandiyo.my.id/",
+    link: "https://bakmipaksandiyo.vercel.app/",
     image: "/certificate-images/image_LP.png",
     category: "Web/Apps",
   },
@@ -48,6 +48,14 @@ const dummyProjects = [
     tech: ["Next.js", "TailwindCSS", "TypeScript","PostgreSQL"],
     link: "https://dibisnis-in.vercel.app/",
     image: "/certificate-images/DiBisnisin.png",
+    category: "Web/Apps",
+  },
+  {
+    title: "RestoPOS - QR-Based Food Ordering System",
+    description: "Sistem pemesanan makanan berbasis QR Code untuk restoran. Pelanggan scan QR di meja, pesan menu, dan bayar via QRIS atau tunai — tanpa antri, tanpa login.",
+    tech: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "Pusher", "Midtrans", "TailwindCSS", "Redis"],
+    link: "https://bakmipaksandiyo-pos.vercel.app/",
+    image: "/certificate-images/Pos.png",
     category: "Web/Apps",
   },
   {
