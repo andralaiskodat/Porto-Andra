@@ -71,7 +71,16 @@ const Preloader = ({ onFinished }) => {
                   {/* 4. Tambahkan prop onLoad ke komponen Spline */}
                   <Spline 
                     scene="https://prod.spline.design/FcZ66SFMX1YbF-0I/scene.splinecode" 
-                    onLoad={handleAssetLoad}
+                    onLoad={() => {
+                      handleAssetLoad();
+                      try {
+                        const badges = document.querySelectorAll('a[href*="spline.design"], #spline-watermark, [data-spline-watermark], spline-viewer #logo');
+                        badges.forEach(el => {
+                          el.style.display = 'none';
+                          el.remove();
+                        });
+                      } catch (err) {}
+                    }}
                   />
                 </div>
               </div>

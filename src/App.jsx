@@ -140,8 +140,19 @@ function App() {
                     transition={{ duration: 0.9, ease: "easeOut", delay: 0.2 }}
                     className="md:w-1/3 flex justify-center"
                   >
-                    <div className="w-full h-[420px] md:h-[530px] flex items-center justify-center">
-                      <Spline scene="https://prod.spline.design/FcZ66SFMX1YbF-0I/scene.splinecode" />
+                    <div className="w-full h-[420px] md:h-[530px] flex items-center justify-center relative overflow-hidden">
+                      <Spline 
+                        scene="https://prod.spline.design/FcZ66SFMX1YbF-0I/scene.splinecode" 
+                        onLoad={() => {
+                          try {
+                            const badges = document.querySelectorAll('a[href*="spline.design"], #spline-watermark, [data-spline-watermark], spline-viewer #logo');
+                            badges.forEach(el => {
+                              el.style.display = 'none';
+                              el.remove();
+                            });
+                          } catch (err) {}
+                        }}
+                      />
                     </div>
                   </motion.div>
                 )}

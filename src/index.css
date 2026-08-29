@@ -27,6 +27,25 @@
   .font-cascadia {
     font-family: 'Cascadia Code', monospace;
   }
+
+  /* Sembunyikan Watermark / Badge 'Built with Spline' */
+  #spline-watermark,
+  a[href*="spline.design"],
+  .spline-watermark,
+  [data-spline-watermark],
+  spline-viewer #logo,
+  spline-viewer::part(logo),
+  spline-viewer::part(watermark) {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    z-index: -9999 !important;
+    clip-path: inset(100%) !important;
+  }
 }
 
 /* --- Gaya untuk Latar Belakang Preloader --- */
