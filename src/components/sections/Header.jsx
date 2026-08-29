@@ -5,6 +5,7 @@ import bangzenLogo from '../../assets/images/LogoAndra.png';
 import { useNavbar } from '../../contexts/NavbarContext';
 import { useAdmin } from '../../contexts/AdminContext';
 import AdminLogin from '../admin/AdminLogin';
+import AdminProjects from '../admin/AdminProjects';
 import AdminMessages from '../admin/AdminMessages';
 import AdminComments from '../admin/AdminComments';
 
@@ -16,7 +17,7 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [showAdminDashboard, setShowAdminDashboard] = useState(false);
-  const [adminView, setAdminView] = useState('messages'); // 'messages' or 'comments'
+  const [adminView, setAdminView] = useState('projects'); // 'projects', 'messages', or 'comments'
   
   const { isNavbarVisible, hideNavbar, showNavbar } = useNavbar();
   const { isAuthenticated, logout } = useAdmin();
@@ -221,11 +222,20 @@ const Header = () => {
         onSuccess={handleLoginSuccess}
       />
 
-      {/* Admin Dashboard - Toggle between Messages and Comments */}
+      {/* Admin Dashboard: Projects, Messages, Comments */}
+      {adminView === 'projects' && (
+        <AdminProjects
+          isOpen={showAdminDashboard}
+          onClose={handleCloseAdminDashboard}
+          onNavigate={(view) => setAdminView(view)}
+        />
+      )}
+
       {adminView === 'messages' && (
         <AdminMessages
           isOpen={showAdminDashboard}
           onClose={handleCloseAdminDashboard}
+          onNavigate={(view) => setAdminView(view)}
         />
       )}
       
@@ -233,19 +243,8 @@ const Header = () => {
         <AdminComments
           isOpen={showAdminDashboard}
           onClose={handleCloseAdminDashboard}
+          onNavigate={(view) => setAdminView(view)}
         />
-      )}
-
-      {/* Dashboard Switcher - Floating Button */}
-      {showAdminDashboard && (
-        <div className="fixed bottom-6 right-6 z-[60] flex flex-col gap-2">
-          <button
-            onClick={() => setAdminView(adminView === 'messages' ? 'comments' : 'messages')}
-            className="bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white px-4 py-2 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2"
-          >
-            {adminView === 'messages' ? '💬 Comments' : '📧 Messages'}
-          </button>
-        </div>
       )}
 
       {/* Animasi gradient keyframes */}

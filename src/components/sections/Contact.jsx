@@ -16,7 +16,9 @@ import {
   FaCog
 } from 'react-icons/fa';
 import { SiTiktok } from 'react-icons/si';
+import AdminProjects from '../admin/AdminProjects';
 import AdminMessages from '../admin/AdminMessages';
+import AdminComments from '../admin/AdminComments';
 import AdminLogin from '../admin/AdminLogin';
 import { useAdmin } from '../../contexts/AdminContext';
 
@@ -43,6 +45,7 @@ const Contact = () => {
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [adminView, setAdminView] = useState('projects');
 
   const { isAuthenticated } = useAdmin();
 
@@ -486,12 +489,40 @@ const Contact = () => {
         </div>
       </div>
 
-      {/* Admin Messages Modal */}
+      {/* Admin Modals */}
       <AnimatePresence>
-        {isAdminOpen && (
+        {isAdminOpen && adminView === 'projects' && (
+          <AdminProjects
+            isOpen={isAdminOpen}
+            onClose={() => setIsAdminOpen(false)}
+            onNavigate={(view) => setAdminView(view)}
+          />
+        )}
+
+        {isAdminOpen && adminView === 'messages' && (
           <AdminMessages 
             isOpen={isAdminOpen}
             onClose={() => setIsAdminOpen(false)}
+            onNavigate={(view) => setAdminView(view)}
+          />
+        )}
+
+        {isAdminOpen && adminView === 'comments' && (
+          <AdminComments 
+            isOpen={isAdminOpen}
+            onClose={() => setIsAdminOpen(false)}
+            onNavigate={(view) => setAdminView(view)}
+          />
+        )}
+
+        {isLoginOpen && (
+          <AdminLogin
+            isOpen={isLoginOpen}
+            onClose={() => setIsLoginOpen(false)}
+            onSuccess={() => {
+              setIsLoginOpen(false);
+              setIsAdminOpen(true);
+            }}
           />
         )}
       </AnimatePresence>

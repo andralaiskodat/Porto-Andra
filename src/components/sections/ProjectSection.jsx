@@ -3,86 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   FaExternalLinkAlt, FaReact, FaNodeJs, FaHtml5, FaCss3Alt, 
-  FaJsSquare, FaTools, FaFigma, FaGithub, FaTimes, FaDownload
+  FaJsSquare, FaTools, FaFigma, FaGithub, FaTimes, FaDownload, FaDatabase, FaLayerGroup
 } from 'react-icons/fa';
 import { 
   SiTailwindcss, SiNextdotjs, SiVercel, SiMongodb, 
-  SiExpress, SiPostgresql 
+  SiExpress, SiPostgresql, SiTypescript, SiPrisma, SiPusher, SiRedis, SiPython, SiFlask
 } from 'react-icons/si';
 import { PiCodeBold } from "react-icons/pi";
 import { LuBadge } from "react-icons/lu";
 import { LiaLayerGroupSolid } from "react-icons/lia";
 import { useNavbar } from '../../contexts/NavbarContext';
-
-// ===================================
-// DATA PROYEK (CONTOH)
-// ===================================
-const dummyProjects = [
-  {
-    title: "Landing Page Bakmi Pak Sandiyo",
-    description: "Website landing page untuk Bakmi Pak Sandiyo, menampilkan menu, lokasi, dan kontak.",
-    tech: ["Html", "CSS", "BootStrap", "Framer Motion"],
-    link: "https://bakmipaksandiyo.vercel.app/",
-    image: "/certificate-images/image_LP.png",
-    category: "Web/Apps",
-  },
-  {
-    title: "DESTINA - Website pencari Wisata Daerah",
-    description: "Aplikasi web untuk mencari destinasi wisata lokal dengan fitur pencarian dan filter.",
-    tech: ["React", "Vite", "TailwindCSS"],
-    link: "https://destina-ten.vercel.app/",
-    image: "/certificate-images/image_Destina.png",
-    category: "Web/Apps",
-  },
-  {
-    title: "Sistem Deteksi Penyakit Tanaman Tomat",
-    description: "Membuat Aplikasi web untuk mendeteksi penyakit pada tanaman tomat melalui daun menggunakan model ML dilengkapi dangan fitur Chat AI.",
-    tech: ["Python", "Flask", "React"],
-    link: "https://drive.google.com/file/d/1XOajDgZBGIz4tQ039mac9WD_vSYYGwGU/view?usp=sharing",
-    image: "/certificate-images/Picture_Tomadetect.png",
-    category: "Web/Apps",
-  },
-  {
-    title: "DiBisnis.in - Platform Kasir Digital untuk UMKM Kuliner",
-    description: "Kelola penjualan, inventori, dan promosikan bisnis kuliner Anda secara online dengan mudah, cepat, dan gratis.",
-    tech: ["Next.js", "TailwindCSS", "TypeScript","PostgreSQL"],
-    link: "https://dibisnis-in.vercel.app/",
-    image: "/certificate-images/DiBisnisin.png",
-    category: "Web/Apps",
-  },
-  {
-    title: "RestoPOS - QR-Based Food Ordering System",
-    description: "Sistem pemesanan makanan berbasis QR Code untuk restoran. Pelanggan scan QR di meja, pesan menu, dan bayar via QRIS atau tunai — tanpa antri, tanpa login.",
-    tech: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "Pusher", "Midtrans", "TailwindCSS", "Redis"],
-    link: "https://bakmipaksandiyo-pos.vercel.app/",
-    image: "/certificate-images/Pos.png",
-    category: "Web/Apps",
-  },
-  {
-    title: "Brosur Iklan Produk",
-    description: "Brosur iklan produk dengan desain menarik dan informatif.",
-    tech: ["Canva", "Photoshop"],
-    link: "https://drive.google.com/file/d/1nBFIH6qTDLB624goSIrKY3CcsTO_Tf2g/view?usp=sharing",
-    image: "/certificate-images/image_Iklan.png",
-    category: "Graphic Design",
-  },
-  {
-    title: "Majalah Interior Rumah",
-    description: "Majalah yang menampilkan desain interior rumah modern.",
-    tech: ["Photoshop", "InDesign" ,"Illustrator"],
-    link: "https://drive.google.com/file/d/1nBFIH6qTDLB624goSIrKY3CcsTO_Tf2g/view?usp=sharing",
-    image: "/certificate-images/image_Majalah.png",
-    category: "Graphic Design",
-  },
-    {
-    title: "Logo",
-    description: "Desain logo kreatif untuk berbagai merek UMKM dan perusahaan.",
-    tech: ["Photoshop", "Illustrator"],
-    link: "https://drive.google.com/file/d/1nBFIH6qTDLB624goSIrKY3CcsTO_Tf2g/view?usp=sharing",
-    image: "/certificate-images/image_Logo.png",
-    category: "Graphic Design",
-  },
-];
+import { fetchProjects } from '../../lib/supabase';
 
 // ===================================
 // DATA SERTIFIKAT Fransisko Andrade Laiskodat
@@ -280,40 +211,105 @@ const CertificatePreviewModal = ({ certificate, onClose }) => {
 };
 
 // ===================================
-// KOMPONEN KARTU PROYEK
+// KOMPONEN SKELETON LOADER PROYEK
 // ===================================
-const ProjectCard = ({ project }) => {
-    const techIcons = {
-    "Next.js": <SiNextdotjs />, "React": <FaReact />, "TailwindCSS": <SiTailwindcss />,
-    "Framer Motion": " गति ", "Node.js": <FaNodeJs />, "Express": <SiExpress />, 
-    "MongoDB": <SiMongodb />, "JWT": "🔑", "Figma": <FaFigma />, "Storybook": "📚"
-    };
+const ProjectSkeleton = () => {
+  return (
+    <div className="relative h-64 sm:h-72 rounded-2xl overflow-hidden bg-slate-900/60 border border-slate-800 p-5 flex flex-col justify-between animate-pulse">
+      <div className="space-y-3">
+        <div className="h-6 w-3/4 bg-slate-800/80 rounded-lg"></div>
+        <div className="h-4 w-full bg-slate-800/60 rounded-md"></div>
+        <div className="h-4 w-2/3 bg-slate-800/60 rounded-md"></div>
+      </div>
+      <div className="flex items-center justify-between pt-4 border-t border-slate-800/50">
+        <div className="flex gap-2">
+          <div className="h-6 w-16 bg-slate-800/80 rounded-full"></div>
+          <div className="h-6 w-16 bg-slate-800/80 rounded-full"></div>
+        </div>
+        <div className="h-8 w-8 bg-slate-800/80 rounded-full"></div>
+      </div>
+    </div>
+  );
+};
 
-    return (
-    <a href={project.link} target="_blank" rel="noopener noreferrer"
-        className="group relative h-64 sm:h-72 rounded-2xl overflow-hidden transition-shadow duration-300 hover:shadow-lg hover:shadow-cyan-500/30"
-        style={{ background: `url('${project.image}') center/cover no-repeat`, cursor: 'pointer' }}
+// ===================================
+// KOMPONEN KARTU PROYEK (SMOOTH BLUR RENDER)
+// ===================================
+const ProjectCard = ({ project, index = 0 }) => {
+  const techIcons = {
+    "Next.js": <SiNextdotjs />, "React": <FaReact />, "TailwindCSS": <SiTailwindcss />,
+    "Framer Motion": "⚡", "Node.js": <FaNodeJs />, "Express": <SiExpress />, 
+    "MongoDB": <SiMongodb />, "PostgreSQL": <SiPostgresql />, "TypeScript": <SiTypescript />,
+    "Prisma": <SiPrisma />, "Pusher": <SiPusher />, "Redis": <SiRedis />,
+    "Python": <SiPython />, "Flask": <SiFlask />, "Figma": <FaFigma />, "Photoshop": "🎨"
+  };
+
+  return (
+    <motion.a
+      href={project.link || '#'}
+      target={project.link ? "_blank" : "_self"}
+      rel="noopener noreferrer"
+      initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.6, delay: Math.min(index * 0.08, 0.4), ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -6 }}
+      className="group relative h-64 sm:h-72 rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,255,220,0.25)] border border-slate-800/80 hover:border-cyan-400/50 block cursor-pointer bg-slate-950"
     >
-        <div className="absolute inset-0 bg-black/50 group-hover:bg-black/60 transition-colors duration-300 flex flex-col justify-between p-4 sm:p-6 text-white">
+      {/* Background Image with smooth progressive zoom */}
+      <div className="absolute inset-0 overflow-hidden">
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+          onError={(e) => {
+            e.target.src = 'https://placehold.co/600x400/060010/00ffdc?text=' + encodeURIComponent(project.title);
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/65 to-slate-950/40 group-hover:from-slate-950/95 group-hover:via-slate-950/75 transition-all duration-300"></div>
+      </div>
+
+      {/* Content Container */}
+      <div className="relative h-full flex flex-col justify-between p-5 sm:p-6 z-10">
         <div>
-            <h3 className="text-lg sm:text-xl font-bold text-cyan-300">{project.title}</h3>
-            <p className="text-slate-300 mt-2 text-xs sm:text-sm leading-relaxed">{project.description}</p>
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <h3 className="text-lg sm:text-xl font-bold text-cyan-300 group-hover:text-white transition-colors duration-300 line-clamp-1">
+              {project.title}
+            </h3>
+            {project.category && (
+              <span className="text-[10px] uppercase font-mono tracking-wider px-2.5 py-0.5 rounded-full bg-cyan-950/80 text-cyan-300 border border-cyan-800/40 flex-shrink-0">
+                {project.category}
+              </span>
+            )}
+          </div>
+          <p className="text-slate-300 text-xs sm:text-sm leading-relaxed line-clamp-3 group-hover:text-slate-200 transition-colors">
+            {project.description}
+          </p>
         </div>
-        <div className="flex items-end justify-between">
-            <div className="flex flex-wrap gap-2 mt-4">
-            {project.tech.map((t, i) => (
-                <span key={i} className="flex items-center gap-1 text-xs font-mono px-2 py-1 rounded-full bg-cyan-900/70 text-cyan-200 border border-cyan-800/30 backdrop-blur-sm">
+
+        <div className="flex items-end justify-between pt-3 border-t border-slate-700/30">
+          <div className="flex flex-wrap gap-1.5 max-w-[80%]">
+            {Array.isArray(project.tech) && project.tech.map((t, i) => (
+              <span 
+                key={i} 
+                className="flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-md bg-cyan-950/80 text-cyan-200 border border-cyan-800/40 backdrop-blur-sm shadow-sm"
+              >
                 {techIcons?.[t] || t}
-                </span>
+              </span>
             ))}
+          </div>
+          {project.link ? (
+            <div className="p-2.5 rounded-full bg-cyan-500/20 text-cyan-300 group-hover:bg-cyan-400 group-hover:text-slate-950 transition-all duration-300 border border-cyan-400/40 shadow-lg group-hover:scale-110">
+              <FaExternalLinkAlt className="text-xs" />
             </div>
-            <FaExternalLinkAlt className="text-slate-300 group-hover:text-cyan-200 transition-colors duration-300" />
+          ) : null}
         </div>
-        </div>
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div className="absolute inset-0 rounded-2xl border border-cyan-300/10 pointer-events-none"></div>
-    </a>
-    );
+      </div>
+
+      {/* Ambient glass highlight glow */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/10 via-transparent to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+    </motion.a>
+  );
 };
 
 // ===================================
@@ -321,14 +317,50 @@ const ProjectCard = ({ project }) => {
 // ===================================
 function ProjectSection() {
   const [activeTab, setActiveTab] = useState('Projects');
+  const [projects, setProjects] = useState([]);
+  const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   const [projectCategory, setProjectCategory] = useState('Web/Apps');
   const [previewCertificate, setPreviewCertificate] = useState(null);
   const { hideNavbar, showNavbar } = useNavbar();
 
-  // === CHANGE START: State dan konstanta untuk Show More/Less ===
+  // Load Projects from Supabase / Local Fallback
+  useEffect(() => {
+    let isMounted = true;
+    const loadData = async () => {
+      setIsLoadingProjects(true);
+      try {
+        const data = await fetchProjects();
+        if (isMounted) {
+          setProjects(data);
+        }
+      } catch (err) {
+        console.error('Error fetching projects in section:', err);
+      } finally {
+        if (isMounted) {
+          setIsLoadingProjects(false);
+        }
+      }
+    };
+
+    loadData();
+
+    // Listen for storage changes from Admin operations
+    const handleStorageUpdate = () => {
+      fetchProjects().then(data => {
+        if (isMounted) setProjects(data);
+      });
+    };
+    window.addEventListener('storage', handleStorageUpdate);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener('storage', handleStorageUpdate);
+    };
+  }, []);
+
+  // === State dan konstanta untuk Show More/Less Sertifikat ===
   const INITIAL_CERTIFICATES_TO_SHOW = 6;
   const [visibleCertificatesCount, setVisibleCertificatesCount] = useState(INITIAL_CERTIFICATES_TO_SHOW);
-  // === CHANGE END ===
 
   useEffect(() => {
     if (previewCertificate) {
@@ -350,11 +382,18 @@ function ProjectSection() {
     { id: 'Tech Stack', label: 'Tech Stack', icon: <LiaLayerGroupSolid className="text-[1.5em] mb-1" /> },
   ];
 
-  const filteredProjects = dummyProjects.filter(
+  // Dynamic Categories extracted from live projects
+  const availableCategories = React.useMemo(() => {
+    const defaultCats = ['Web/Apps', 'Graphic Design'];
+    const projectCats = projects.map(p => p.category).filter(Boolean);
+    const combined = Array.from(new Set([...defaultCats, ...projectCats]));
+    return combined;
+  }, [projects]);
+
+  const filteredProjects = projects.filter(
     (p) => p.category === projectCategory
   );
 
-  // === CHANGE START: Handler untuk tombol Show More/Less ===
   const handleShowMore = () => {
     setVisibleCertificatesCount(userCertificates.length);
   };
@@ -362,7 +401,6 @@ function ProjectSection() {
   const handleShowLess = () => {
     setVisibleCertificatesCount(INITIAL_CERTIFICATES_TO_SHOW);
   };
-  // === CHANGE END ===
 
   return (
     <section id="project" className="py-20">
@@ -371,11 +409,12 @@ function ProjectSection() {
         @keyframes line-shadow-anim { 0% { background-position: 0 0; } 100% { background-position: 100% 100%; } }
         .line-shadow-effect::after { content: attr(data-text); position: absolute; z-index: -1; left: 0.04em; top: 0.04em; background-image: linear-gradient(45deg, transparent 45%, var(--shadow-color) 45%, var(--shadow-color) 55%, transparent 0); background-size: 0.06em 0.06em; -webkit-background-clip: text; background-clip: text; color: transparent; animation: line-shadow-anim 30s linear infinite; }
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
       `}</style>
       
       <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
+        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="text-center mb-20"
@@ -428,25 +467,61 @@ function ProjectSection() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -10, opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              initial={{ y: 15, opacity: 0, filter: "blur(6px)" }}
+              animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+              exit={{ y: -15, opacity: 0, filter: "blur(6px)" }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
               className="p-6 md:p-10"
             >
               {activeTab === 'Projects' && (
                 <>
-                  <div className="flex justify-center gap-4 mb-8">
-                    <button className={`px-5 py-2 rounded-full font-semibold transition-all duration-200 border ${projectCategory === 'Web/Apps' ? 'bg-cyan-700/80 text-white border-cyan-400 shadow-cyan-500/10 shadow-lg' : 'bg-slate-900/60 text-cyan-200 border-slate-700 hover:bg-cyan-800/40 hover:text-white'}`} onClick={() => setProjectCategory('Web/Apps')}>Web/Apps</button>
-                    <button className={`px-5 py-2 rounded-full font-semibold transition-all duration-200 border ${projectCategory === '3D Design' ? 'bg-cyan-700/80 text-white border-cyan-400 shadow-cyan-500/10 shadow-lg' : 'bg-slate-900/60 text-cyan-200 border-slate-700 hover:bg-cyan-800/40 hover:text-white'}`} onClick={() => setProjectCategory('Graphic Design')}>Graphic Design</button>
+                  {/* Category Buttons with smooth indicator */}
+                  <div className="flex justify-center flex-wrap gap-3 mb-10">
+                    {availableCategories.map((cat) => (
+                      <button
+                        key={cat}
+                        className={`px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 border ${
+                          projectCategory === cat
+                            ? 'bg-gradient-to-r from-cyan-600 to-cyan-500 text-white border-cyan-400 shadow-[0_0_20px_rgba(0,255,220,0.35)] scale-105'
+                            : 'bg-slate-900/60 text-cyan-200/80 border-slate-700 hover:bg-cyan-900/30 hover:text-white'
+                        }`}
+                        onClick={() => setProjectCategory(cat)}
+                      >
+                        {cat}
+                      </button>
+                    ))}
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {filteredProjects.length > 0 ? (
-                      filteredProjects.map((p, i) => <ProjectCard key={i} project={p} />)
-                    ) : (
-                      <div className="col-span-full text-center text-slate-400 py-12">No projects in this category yet.</div>
-                    )}
-                  </div>
+
+                  {/* Projects Grid with Skeleton & Smooth Blur Reveal */}
+                  {isLoadingProjects ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {[1, 2, 3, 4, 5, 6].map((n) => (
+                        <ProjectSkeleton key={n} />
+                      ))}
+                    </div>
+                  ) : (
+                    <motion.div 
+                      layout
+                      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    >
+                      <AnimatePresence mode="popLayout">
+                        {filteredProjects.length > 0 ? (
+                          filteredProjects.map((p, i) => (
+                            <ProjectCard key={p.id || i} project={p} index={i} />
+                          ))
+                        ) : (
+                          <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="col-span-full text-center text-slate-400 py-16"
+                          >
+                            <FaLayerGroup className="mx-auto text-4xl mb-3 opacity-30" />
+                            <p className="text-base">Belum ada proyek dalam kategori ini.</p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  )}
                 </>
               )}
               {activeTab === 'Certificate' && (

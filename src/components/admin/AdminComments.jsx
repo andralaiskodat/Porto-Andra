@@ -13,17 +13,27 @@ import {
   FaShieldAlt,
   FaEdit,
   FaCheck,
-  FaPlus
+  FaPlus,
+  FaSearch,
+  FaFilter,
+  FaExclamationTriangle
 } from 'react-icons/fa';
 import { useAdmin } from '../../contexts/AdminContext';
 
-const AdminComments = ({ isOpen, onClose }) => {
+const AdminComments = ({ isOpen, onClose, onNavigate }) => {
   const [comments, setComments] = useState([]);
+  const [filteredComments, setFilteredComments] = useState([]);
   const [selectedComment, setSelectedComment] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterType, setFilterType] = useState('All'); // 'All', 'With Likes', 'Recent'
   const [sessionTime, setSessionTime] = useState('');
+  
+  // Edit & Add Modal state
   const [editingComment, setEditingComment] = useState(null);
   const [editText, setEditText] = useState('');
   const [isAddingComment, setIsAddingComment] = useState(false);
+  const [deletingCommentId, setDeletingCommentId] = useState(null);
+  const [toastMessage, setToastMessage] = useState({ type: '', message: '' });
   const [newComment, setNewComment] = useState({
     name: '',
     message: ''
@@ -35,17 +45,19 @@ const AdminComments = ({ isOpen, onClose }) => {
   useEffect(() => {
     const loadComments = async () => {
       try {
-        // First try localStorage
         const savedComments = localStorage.getItem('portfolioComments');
         if (savedComments) {
-          setComments(JSON.parse(savedComments));
+          const parsed = JSON.parse(savedComments);
+          setComments(parsed);
+          setFilteredComments(parsed);
+          if (parsed.length > 0) setSelectedComment(parsed[0]);
         } else {
-          // Fallback to JSON file
           const response = await fetch('/comments.json');
           if (response.ok) {
             const data = await response.json();
             setComments(data);
-            // Save to localStorage for future use
+            setFilteredComments(data);
+            if (data.length > 0) setSelectedComment(data[0]);
             localStorage.setItem('portfolioComments', JSON.stringify(data));
           }
         }
@@ -60,6 +72,27 @@ const AdminComments = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
+  // Filter & Search comments
+  useEffect(() => {
+    let result = [...comments];
+    
+    if (filterType === 'With Likes') {
+      result = result.filter(c => c.likes > 0);
+    } else if (filterType === 'Recent') {
+      result = result.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(c => 
+        (c.name && c.name.toLowerCase().includes(q)) || 
+        (c.message && c.message.toLowerCase().includes(q))
+      );
+    }
+
+    setFilteredComments(result);
+  }, [searchQuery, filterType, comments]);
+
   // Session timer
   useEffect(() => {
     const updateSessionTime = () => {
@@ -68,7 +101,6 @@ const AdminComments = ({ isOpen, onClose }) => {
       const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
       setSessionTime(`${minutes}:${String(seconds).padStart(2, '0')}`);
 
-      // Auto logout when session expires
       if (remaining <= 0) {
         handleLogout();
       }
@@ -81,6 +113,11 @@ const AdminComments = ({ isOpen, onClose }) => {
     }
   }, [isOpen, getSessionTimeRemaining]);
 
+  const showToast = (type, message) => {
+    setToastMessage({ type, message });
+    setTimeout(() => setToastMessage({ type: '', message: '' }), 4000);
+  };
+
   // Save comments to localStorage
   const saveComments = (updatedComments) => {
     setComments(updatedComments);
@@ -88,10 +125,15 @@ const AdminComments = ({ isOpen, onClose }) => {
   };
 
   // Delete comment
-  const deleteComment = (commentId) => {
-    const updatedComments = comments.filter(comment => comment.id !== commentId);
+  const confirmDeleteComment = () => {
+    if (!deletingCommentId) return;
+    const updatedComments = comments.filter(comment => comment.id !== deletingCommentId);
     saveComments(updatedComments);
-    setSelectedComment(null);
+    if (selectedComment?.id === deletingCommentId) {
+      setSelectedComment(updatedComments[0] || null);
+    }
+    setDeletingCommentId(null);
+    showToast('success', 'Komentar berhasil dihapus');
   };
 
   // Edit comment
@@ -110,10 +152,10 @@ const AdminComments = ({ isOpen, onClose }) => {
     setEditingComment(null);
     setEditText('');
 
-    // Update selected comment if it's the one being edited
     if (selectedComment && selectedComment.id === editingComment) {
       setSelectedComment({ ...selectedComment, message: editText, edited: true });
     }
+    showToast('success', 'Komentar berhasil diperbarui');
   };
 
   const cancelEdit = () => {
@@ -122,22 +164,24 @@ const AdminComments = ({ isOpen, onClose }) => {
   };
 
   // Add new comment
-  const addComment = () => {
+  const handleAddComment = () => {
     if (!newComment.name.trim() || !newComment.message.trim()) return;
 
     const comment = {
       id: Date.now(),
       name: newComment.name.trim(),
       message: newComment.message.trim(),
-      photo: `https://ui-avatars.com/api/?name=${encodeURIComponent(newComment.name)}&background=random&color=ffffff&size=100`,
+      photo: `https://ui-avatars.com/api/?name=${encodeURIComponent(newComment.name)}&background=00ffdc&color=000754&size=100`,
       timestamp: new Date().toISOString(),
       likes: 0
     };
 
     const updatedComments = [comment, ...comments];
     saveComments(updatedComments);
+    setSelectedComment(comment);
     setNewComment({ name: '', message: '' });
     setIsAddingComment(false);
+    showToast('success', 'Komentar baru berhasil ditambahkan');
   };
 
   // Update likes
@@ -149,7 +193,6 @@ const AdminComments = ({ isOpen, onClose }) => {
     );
     saveComments(updatedComments);
 
-    // Update selected comment if it's the one being updated
     if (selectedComment && selectedComment.id === commentId) {
       setSelectedComment({
         ...selectedComment,
@@ -171,328 +214,479 @@ const AdminComments = ({ isOpen, onClose }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-[9999] p-4"
+      className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-[9999] p-2 sm:p-4"
       onClick={onClose}
     >
       <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.8, opacity: 0 }}
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.9, opacity: 0, y: 20 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="relative max-w-6xl w-full bg-slate-900/95 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden max-h-[90vh]"
+        className="relative max-w-6xl w-full bg-slate-900/95 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-700/50">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full">
+        {/* Toast Alert */}
+        <AnimatePresence>
+          {toastMessage.message && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className={`absolute top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-full text-sm font-semibold shadow-2xl flex items-center gap-2 ${
+                toastMessage.type === 'error'
+                  ? 'bg-red-500/90 text-white border border-red-400'
+                  : 'bg-emerald-500/90 text-white border border-emerald-400'
+              }`}
+            >
+              {toastMessage.type === 'error' ? <FaExclamationTriangle /> : <FaCheck />}
+              <span>{toastMessage.message}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ================= HEADER ADMIN (CONSISTENT ROW) ================= */}
+        <div className="p-4 sm:p-6 border-b border-slate-700/50 flex flex-wrap items-center justify-between gap-4 bg-slate-900/60">
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl shadow-lg shadow-purple-500/20">
               <FaComments className="text-white text-xl" />
             </div>
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <h2 className="text-2xl font-bold text-white">Comments Manager</h2>
-                <div className="bg-green-500/20 px-2 py-1 rounded-full border border-green-400/30">
-                  <span className="text-green-300 text-xs font-semibold">AUTHENTICATED</span>
-                </div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl sm:text-2xl font-bold text-white font-moderniz">
+                  COMMENTS MANAGER
+                </h2>
+                <span className="hidden sm:inline-flex bg-purple-500/20 text-purple-300 text-xs px-2.5 py-0.5 rounded-full border border-purple-400/30">
+                  {comments.length} Total
+                </span>
               </div>
-              <p className="text-slate-400">
-                {comments.length} total comments
+              <p className="text-xs text-slate-400">
+                Kelola dan moderasi komentar pengunjung portofolio
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Add Comment Button */}
+          {/* Navigation View Switcher */}
+          <div className="flex items-center bg-slate-800/80 p-1 rounded-xl border border-slate-700/60">
             <button
-              onClick={() => setIsAddingComment(true)}
-              className="bg-green-500/20 hover:bg-green-500/30 backdrop-blur-md px-4 py-2 rounded-full border border-green-400/30 transition-all duration-300 group flex items-center gap-2"
+              onClick={() => onNavigate && onNavigate('projects')}
+              className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all"
             >
-              <FaPlus className="text-green-300 group-hover:text-green-200 text-sm" />
-              <span className="text-green-300 group-hover:text-green-200 text-sm">Add Comment</span>
+              🚀 Projects
             </button>
+            <button
+              onClick={() => onNavigate && onNavigate('messages')}
+              className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all"
+            >
+              📧 Messages
+            </button>
+            <button
+              onClick={() => onNavigate && onNavigate('comments')}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500/30 text-cyan-200 border border-cyan-400/40 shadow-sm transition-all"
+            >
+              💬 Comments
+            </button>
+          </div>
 
-            {/* Session Timer */}
-            <div className="bg-slate-800/50 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-600/50 flex items-center gap-2">
+          {/* Controls: Timer, Logout, Close */}
+          <div className="flex items-center gap-2">
+            <div className="bg-slate-800/50 px-3 py-1.5 rounded-xl border border-slate-700/60 flex items-center gap-2 text-xs">
               <FaClock className="text-slate-400" />
-              <span className="text-slate-300 text-sm font-mono">{sessionTime}</span>
+              <span className="text-slate-300 font-mono">{sessionTime}</span>
               <button
                 onClick={extendSession}
-                className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors duration-300"
-                title="Extend session"
+                className="text-cyan-400 hover:text-cyan-300 font-semibold"
+                title="Perpanjang sesi 15 menit"
               >
                 +15m
               </button>
             </div>
 
-            {/* Logout Button */}
             <button
               onClick={handleLogout}
-              className="bg-orange-500/20 hover:bg-orange-500/30 backdrop-blur-md p-3 rounded-full border border-orange-400/30 transition-all duration-300 group"
-              title="Logout"
+              className="bg-orange-500/20 hover:bg-orange-500/30 p-2.5 rounded-xl border border-orange-400/30 text-orange-300 transition-all"
+              title="Logout Admin"
             >
-              <FaSignOutAlt className="text-orange-300 group-hover:text-orange-200" />
+              <FaSignOutAlt />
             </button>
 
-            {/* Close Button */}
             <button
               onClick={onClose}
-              className="bg-red-500/20 hover:bg-red-500/30 backdrop-blur-md p-3 rounded-full border border-red-400/30 transition-all duration-300 group"
+              className="bg-red-500/20 hover:bg-red-500/30 p-2.5 rounded-xl border border-red-400/30 text-red-300 transition-all"
+              title="Tutup Modal"
             >
-              <FaTimes className="text-red-300 group-hover:text-red-200" />
+              <FaTimes />
             </button>
           </div>
         </div>
 
-        <div className="flex h-[70vh]">
-          {/* Comments List */}
-          <div className="w-1/2 border-r border-slate-700/50 overflow-y-auto">
-            {comments.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-slate-400">
-                <FaComment className="text-6xl mb-4 opacity-50" />
-                <p>No comments yet</p>
+        {/* ================= ACTIONS BAR (SEARCH, FILTER, ADD) ================= */}
+        <div className="p-4 sm:p-6 border-b border-slate-800 bg-slate-900/40 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-3 flex-1">
+            {/* Search Input */}
+            <div className="relative flex-1 min-w-[200px] max-w-md">
+              <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
+              <input
+                type="text"
+                placeholder="Cari nama atau isi komentar..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-800/60 border border-slate-700/60 rounded-xl text-white placeholder-slate-400 text-sm focus:border-purple-400 focus:outline-none transition-all"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                >
+                  <FaTimes className="text-xs" />
+                </button>
+              )}
+            </div>
+
+            {/* Filter Pills */}
+            <div className="flex items-center gap-1.5">
+              {['All', 'With Likes', 'Recent'].map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setFilterType(f)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+                    filterType === f
+                      ? 'bg-purple-500/20 text-purple-300 border border-purple-400/40 shadow-sm'
+                      : 'bg-slate-800/40 text-slate-400 border border-slate-700/30 hover:bg-slate-800 hover:text-white'
+                  }`}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Add New Comment Button */}
+          <button
+            onClick={() => setIsAddingComment(true)}
+            className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-lg shadow-purple-500/20 transition-all hover:scale-105 active:scale-95"
+          >
+            <FaPlus className="text-xs" />
+            <span>Tambah Komentar</span>
+          </button>
+        </div>
+
+        {/* ================= MAIN SPLIT CONTENT ================= */}
+        <div className="flex flex-col md:flex-row flex-1 overflow-hidden h-[60vh] sm:h-[65vh]">
+          {/* Left Panel: Comments List */}
+          <div className="w-full md:w-1/2 border-r border-slate-800 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+            {filteredComments.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-center text-slate-400 py-12">
+                <FaComment className="text-5xl opacity-30 mb-3" />
+                <p className="text-base font-medium text-slate-300">Tidak ada komentar ditemukan</p>
+                <p className="text-xs text-slate-500 mt-1">Coba reset pencarian atau buat komentar baru</p>
               </div>
             ) : (
-              <div className="p-4 space-y-3">
-                {comments.map((comment) => (
-                  <motion.div
-                    key={comment.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    whileHover={{ scale: 1.02 }}
-                    onClick={() => setSelectedComment(comment)}
-                    className={`p-4 rounded-xl cursor-pointer transition-all duration-300 border bg-slate-800/50 border-slate-600/30 hover:bg-slate-700/50 ${selectedComment?.id === comment.id ? 'ring-2 ring-purple-400' : ''
-                      }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <img
-                        src={comment.photo}
-                        alt={comment.name}
-                        className="w-10 h-10 rounded-full flex-shrink-0"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className="font-semibold text-white truncate">
-                            {comment.name}
-                          </h4>
-                          {comment.edited && (
-                            <span className="text-xs text-slate-400">(edited)</span>
-                          )}
-                        </div>
-                        <p className="text-slate-300 text-sm line-clamp-2 mb-2">
-                          {comment.message}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <p className="text-slate-500 text-xs">
-                            {new Date(comment.timestamp).toLocaleDateString('id-ID', {
-                              year: 'numeric',
-                              month: 'short',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
-                          </p>
-                          <div className="flex items-center gap-1 text-slate-400">
-                            <FaThumbsUp className="text-xs" />
-                            <span className="text-xs">{comment.likes}</span>
-                          </div>
+              filteredComments.map((comment) => (
+                <motion.div
+                  key={comment.id}
+                  layout
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  onClick={() => setSelectedComment(comment)}
+                  className={`p-4 rounded-2xl cursor-pointer transition-all duration-300 border ${
+                    selectedComment?.id === comment.id
+                      ? 'bg-purple-950/40 border-purple-500/50 shadow-lg shadow-purple-500/10'
+                      : 'bg-slate-800/40 hover:bg-slate-800/70 border-slate-700/40'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <img
+                      src={comment.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.name)}&background=00ffdc&color=000754&size=100`}
+                      alt={comment.name}
+                      className="w-10 h-10 rounded-full object-cover border border-slate-600 flex-shrink-0"
+                      onError={(e) => {
+                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.name)}&background=00ffdc&color=000754&size=100`;
+                      }}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <h4 className="font-semibold text-white text-sm truncate">
+                          {comment.name}
+                        </h4>
+                        <div className="flex items-center gap-1 text-xs text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded-full border border-slate-800">
+                          <FaThumbsUp className="text-purple-400 text-[10px]" />
+                          <span>{comment.likes}</span>
                         </div>
                       </div>
+                      <p className="text-slate-300 text-xs line-clamp-2 leading-relaxed mb-2">
+                        {comment.message}
+                      </p>
+                      <div className="flex items-center justify-between text-[10px] text-slate-500">
+                        <span>
+                          {comment.timestamp ? new Date(comment.timestamp).toLocaleDateString('id-ID', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          }) : ''}
+                        </span>
+                        {comment.edited && (
+                          <span className="text-amber-400 italic">(diedit)</span>
+                        )}
+                      </div>
                     </div>
-                  </motion.div>
-                ))}
-              </div>
+                  </div>
+                </motion.div>
+              ))
             )}
           </div>
 
-          {/* Comment Details */}
-          <div className="w-1/2 flex flex-col">
+          {/* Right Panel: Selected Comment Details */}
+          <div className="w-full md:w-1/2 flex flex-col bg-slate-900/30 overflow-y-auto custom-scrollbar">
             {selectedComment ? (
-              <div className="flex-1 flex flex-col">
-                {/* Comment Header */}
-                <div className="p-6 border-b border-slate-700/50">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-4">
+              <div className="p-6 flex flex-col h-full justify-between space-y-6">
+                <div>
+                  {/* Comment Author Header */}
+                  <div className="flex items-start justify-between pb-6 border-b border-slate-800">
+                    <div className="flex items-center gap-4">
                       <img
-                        src={selectedComment.photo}
+                        src={selectedComment.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(selectedComment.name)}&background=00ffdc&color=000754&size=100`}
                         alt={selectedComment.name}
-                        className="w-12 h-12 rounded-full"
+                        className="w-14 h-14 rounded-full object-cover border-2 border-purple-500/40 shadow-lg"
                       />
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-white mb-1">
-                          {selectedComment.name}
-                        </h3>
-                        <p className="text-slate-400 text-sm mb-2">
-                          {new Date(selectedComment.timestamp).toLocaleDateString('id-ID', {
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-lg font-bold text-white">
+                            {selectedComment.name}
+                          </h3>
+                          {selectedComment.edited && (
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                              Diedit
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                          {selectedComment.timestamp ? new Date(selectedComment.timestamp).toLocaleDateString('id-ID', {
+                            weekday: 'long',
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric',
                             hour: '2-digit',
                             minute: '2-digit'
-                          })}
+                          }) : ''}
                         </p>
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-2">
-                            <FaThumbsUp className="text-slate-400" />
-                            <span className="text-slate-300">{selectedComment.likes} likes</span>
-                          </div>
-                          {selectedComment.edited && (
-                            <span className="text-xs text-amber-400">Edited</span>
-                          )}
-                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      {/* Like Controls */}
+                    {/* Actions: Likes Counter & Quick Buttons */}
+                    <div className="flex items-center gap-1.5">
                       <button
                         onClick={() => updateLikes(selectedComment.id, 1)}
-                        className="bg-green-500/20 hover:bg-green-500/30 p-2 rounded-full border border-green-400/30 transition-all duration-300 group"
-                        title="Add like"
+                        className="p-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 rounded-xl border border-emerald-400/30 transition-all"
+                        title="Tambah 1 Like"
                       >
-                        <FaThumbsUp className="text-green-300 group-hover:text-green-200 text-sm" />
+                        <FaThumbsUp className="text-xs" />
                       </button>
-
                       <button
                         onClick={() => updateLikes(selectedComment.id, -1)}
-                        className="bg-red-500/20 hover:bg-red-500/30 p-2 rounded-full border border-red-400/30 transition-all duration-300 group"
-                        title="Remove like"
+                        className="p-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-xl border border-red-400/30 transition-all"
+                        title="Kurangi 1 Like"
                       >
-                        <FaThumbsUp className="text-red-300 group-hover:text-red-200 text-sm rotate-180" />
+                        <FaThumbsUp className="text-xs rotate-180" />
                       </button>
-
-                      {/* Edit Button */}
                       <button
                         onClick={() => startEdit(selectedComment)}
-                        className="bg-blue-500/20 hover:bg-blue-500/30 p-2 rounded-full border border-blue-400/30 transition-all duration-300 group"
-                        title="Edit comment"
+                        className="p-2.5 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded-xl border border-cyan-400/30 transition-all"
+                        title="Edit Teks Komentar"
                       >
-                        <FaEdit className="text-blue-300 group-hover:text-blue-200 text-sm" />
+                        <FaEdit className="text-xs" />
                       </button>
-
-                      {/* Delete Button */}
                       <button
-                        onClick={() => deleteComment(selectedComment.id)}
-                        className="bg-red-500/20 hover:bg-red-500/30 p-2 rounded-full border border-red-400/30 transition-all duration-300 group"
-                        title="Delete comment"
+                        onClick={() => setDeletingCommentId(selectedComment.id)}
+                        className="p-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-xl border border-red-400/30 transition-all"
+                        title="Hapus Komentar"
                       >
-                        <FaTrash className="text-red-300 group-hover:text-red-200 text-sm" />
+                        <FaTrash className="text-xs" />
                       </button>
                     </div>
                   </div>
+
+                  {/* Message Content / Inline Edit */}
+                  <div className="mt-6">
+                    <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                      Isi Komentar
+                    </label>
+                    {editingComment === selectedComment.id ? (
+                      <div className="space-y-4">
+                        <textarea
+                          rows="4"
+                          value={editText}
+                          onChange={(e) => setEditText(e.target.value)}
+                          className="w-full p-4 bg-slate-800/80 border border-purple-500/50 rounded-2xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-400/20 resize-none"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            onClick={saveEdit}
+                            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-lg shadow-emerald-500/20"
+                          >
+                            <FaCheck /> Simpan
+                          </button>
+                          <button
+                            onClick={cancelEdit}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold"
+                          >
+                            Batal
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-5 rounded-2xl bg-slate-800/50 border border-slate-700/50 shadow-inner">
+                        <p className="text-slate-200 text-sm leading-relaxed whitespace-pre-wrap font-cascadia">
+                          {selectedComment.message}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                {/* Comment Content */}
-                <div className="flex-1 p-6 overflow-y-auto">
-                  {editingComment === selectedComment.id ? (
-                    <div className="space-y-4">
-                      <textarea
-                        value={editText}
-                        onChange={(e) => setEditText(e.target.value)}
-                        className="w-full h-32 p-4 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 resize-none"
-                        placeholder="Edit comment..."
-                      />
-                      <div className="flex gap-2">
-                        <button
-                          onClick={saveEdit}
-                          className="bg-green-500/20 hover:bg-green-500/30 px-4 py-2 rounded-xl border border-green-400/30 text-green-300 hover:text-green-200 transition-all duration-300 flex items-center gap-2"
-                        >
-                          <FaCheck /> Save
-                        </button>
-                        <button
-                          onClick={cancelEdit}
-                          className="bg-slate-600/20 hover:bg-slate-600/30 px-4 py-2 rounded-xl border border-slate-500/30 text-slate-300 hover:text-slate-200 transition-all duration-300 flex items-center gap-2"
-                        >
-                          <FaTimes /> Cancel
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700/30">
-                      <p className="text-slate-200 leading-relaxed whitespace-pre-wrap">
-                        {selectedComment.message}
-                      </p>
-                    </div>
-                  )}
+                {/* Footer Info Box */}
+                <div className="p-4 rounded-2xl bg-slate-800/30 border border-slate-700/30 flex items-center justify-between text-xs text-slate-400">
+                  <div className="flex items-center gap-2">
+                    <FaThumbsUp className="text-purple-400" />
+                    <span>Total Likes: <strong className="text-white">{selectedComment.likes}</strong></span>
+                  </div>
+                  <span className="font-mono text-[10px] text-slate-500">ID: {selectedComment.id}</span>
                 </div>
               </div>
             ) : (
-              <div className="flex-1 flex items-center justify-center text-slate-400">
-                <div className="text-center">
-                  <FaComment className="text-6xl mx-auto mb-4 opacity-50" />
-                  <p>Select a comment to view details</p>
-                </div>
+              <div className="flex flex-col items-center justify-center h-full text-center text-slate-400 p-8">
+                <FaComment className="text-5xl opacity-20 mb-3" />
+                <p className="text-base font-medium text-slate-300">Pilih komentar untuk melihat detail</p>
               </div>
             )}
           </div>
         </div>
-      </motion.div>
 
-      {/* Add Comment Modal */}
-      <AnimatePresence>
-        {isAddingComment && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4"
-            onClick={() => setIsAddingComment(false)}
-          >
+        {/* ================= MODAL ADD COMMENT ================= */}
+        <AnimatePresence>
+          {isAddingComment && (
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              className="bg-slate-900/95 backdrop-blur-xl rounded-2xl border border-white/10 p-6 max-w-md w-full"
-              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/85 backdrop-blur-xl flex items-center justify-center z-[10000] p-4"
+              onClick={() => setIsAddingComment(false)}
             >
-              <h3 className="text-xl font-bold text-white mb-4">Add New Comment</h3>
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                className="bg-slate-900 border border-purple-500/30 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-800">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl">
+                      <FaPlus className="text-white text-base" />
+                    </div>
+                    <h3 className="text-lg font-bold text-white">Tambah Komentar Baru</h3>
+                  </div>
+                  <button
+                    onClick={() => setIsAddingComment(false)}
+                    className="p-2 text-slate-400 hover:text-white rounded-lg"
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
 
-              <div className="space-y-4">
-                <input
-                  type="text"
-                  placeholder="Name"
-                  value={newComment.name}
-                  onChange={(e) => setNewComment(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full p-3 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300"
-                />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                      Nama Pengirim
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. John Doe"
+                      value={newComment.name}
+                      onChange={(e) => setNewComment(prev => ({ ...prev, name: e.target.value }))}
+                      className="w-full px-4 py-3 bg-slate-800/60 border border-slate-700 rounded-xl text-white placeholder-slate-500 text-sm focus:border-purple-400 focus:outline-none"
+                    />
+                  </div>
 
-                <textarea
-                  placeholder="Comment message"
-                  value={newComment.message}
-                  onChange={(e) => setNewComment(prev => ({ ...prev, message: e.target.value }))}
-                  className="w-full h-32 p-3 bg-slate-800/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-400 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-300 resize-none"
-                />
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                      Pesan Komentar
+                    </label>
+                    <textarea
+                      rows="4"
+                      placeholder="Tulis isi komentar..."
+                      value={newComment.message}
+                      onChange={(e) => setNewComment(prev => ({ ...prev, message: e.target.value }))}
+                      className="w-full px-4 py-3 bg-slate-800/60 border border-slate-700 rounded-xl text-white placeholder-slate-500 text-sm focus:border-purple-400 focus:outline-none resize-none"
+                    />
+                  </div>
+
+                  <div className="flex gap-3 pt-3 border-t border-slate-800">
+                    <button
+                      onClick={handleAddComment}
+                      disabled={!newComment.name.trim() || !newComment.message.trim()}
+                      className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:opacity-50 text-white font-semibold py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 text-sm"
+                    >
+                      <FaCheck /> Tambah
+                    </button>
+                    <button
+                      onClick={() => setIsAddingComment(false)}
+                      className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-semibold"
+                    >
+                      Batal
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ================= MODAL CONFIRM DELETE ================= */}
+        <AnimatePresence>
+          {deletingCommentId && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-[10001] p-4"
+              onClick={() => setDeletingCommentId(null)}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-slate-900 border border-red-500/30 rounded-3xl p-6 max-w-md w-full shadow-2xl text-center"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="w-14 h-14 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-500/30">
+                  <FaTrash className="text-xl" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Hapus Komentar Ini?</h3>
+                <p className="text-slate-400 text-xs leading-relaxed mb-6">
+                  Tindakan ini permanen dan akan menghapus komentar dari tampilan website.
+                </p>
 
                 <div className="flex gap-3">
                   <button
-                    onClick={addComment}
-                    disabled={!newComment.name.trim() || !newComment.message.trim()}
-                    className="flex-1 bg-green-500/20 hover:bg-green-500/30 disabled:bg-slate-600/20 px-4 py-3 rounded-xl border border-green-400/30 disabled:border-slate-500/30 text-green-300 disabled:text-slate-400 transition-all duration-300 flex items-center justify-center gap-2"
+                    onClick={confirmDeleteComment}
+                    className="flex-1 bg-red-600 hover:bg-red-500 text-white font-semibold py-2.5 rounded-xl text-sm transition-all flex items-center justify-center gap-2"
                   >
-                    <FaCheck /> Add Comment
+                    Ya, Hapus
                   </button>
-
                   <button
-                    onClick={() => setIsAddingComment(false)}
-                    className="bg-slate-600/20 hover:bg-slate-600/30 px-4 py-3 rounded-xl border border-slate-500/30 text-slate-300 hover:text-slate-200 transition-all duration-300"
+                    onClick={() => setDeletingCommentId(null)}
+                    className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-2.5 rounded-xl text-sm transition-all"
                   >
-                    Cancel
+                    Batal
                   </button>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Custom Styles */}
-      <style jsx>{`
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-      `}</style>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </motion.div>
   );
 };
