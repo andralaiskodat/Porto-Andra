@@ -130,17 +130,19 @@ const Header = () => {
                 {/* --- MOBILE HEADER --- */}
                 <div className="w-full flex items-center justify-between md:hidden">
                   {/* Mobile: Brand Logo & Text (Left) */}
-                  <a href="#home" className="flex items-center gap-3">
-                    <img src={bangzenLogo} alt="Bangzen Logo" className="h-12 w-12 flex-shrink-0" />
-                    <div>
-                      <h1 className="font-moderniz text-sm text-[#0077ff] whitespace-nowrap">Fransisko Andrade Laiskodat</h1>
-                      <p className="font-moderniz text-[9px] text-[#000754]" style={{ textShadow: '0.5px 0.5px 0 #00ffdc, -0.5px -0.5px 0 #00ffdc, 0.5px -0.5px 0 #00ffdc, -0.5px 0.5px 0 #00ffdc' }}>
+                  <a href="#home" className="flex items-center gap-2 sm:gap-3 min-w-0 pr-2">
+                    <img src={bangzenLogo} alt="Bangzen Logo" className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0" />
+                    <div className="min-w-0">
+                      <h1 className="font-moderniz text-xs sm:text-sm text-[#0077ff] tracking-tight whitespace-nowrap">
+                        FRANSISKO A. LAISKODAT
+                      </h1>
+                      <p className="font-moderniz text-[8px] sm:text-[9px] text-[#000754] whitespace-nowrap" style={{ textShadow: '0.5px 0.5px 0 #00ffdc, -0.5px -0.5px 0 #00ffdc, 0.5px -0.5px 0 #00ffdc, -0.5px 0.5px 0 #00ffdc' }}>
                         Let's see the awesome Experience
                       </p>
                     </div>
                   </a>
                   {/* Mobile: Hamburger Button (Right) */}
-                  <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-[#00ffdc] text-3xl pointer-events-auto">
+                  <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-[#00ffdc] text-3xl pointer-events-auto flex-shrink-0">
                     &#9776;
                   </button>
                 </div>
