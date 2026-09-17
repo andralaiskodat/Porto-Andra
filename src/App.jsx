@@ -1,35 +1,35 @@
 // src/App.jsx
-import React, { useState } from 'react'; // Impor useState
+import React, { useState } from 'react';
 import Header from './components/sections/Header';
 import Squares from './components/ui/Squares';
 import TextGenerateEffect from "./components/ui/text-generate-effect";
 import GradientText from './components/ui/GradientText';
-import { AnimatedGradientTextDemo } from './components/ui/AnimatedGradientTextDemo';
 import Skills from './components/sections/Skills';
 import { ButtonMovingBorder } from './components/ui/MovingBorderButton';
 import { motion } from "framer-motion";
 import FotoProfile from './components/sections/FotoProfile';
-// Tambahkan FaCube untuk ikon tombol
 import { FaGithub, FaInstagram, FaLinkedin, FaDownload, FaBriefcase, FaCode, FaCertificate, FaGlobe, FaArrowRight, FaCube } from 'react-icons/fa';
-import ANDRA from './assets/images/ANDRA.jpg';
-import { IconCloud } from './components/ui/IconCloud';
 import Spline from '@splinetool/react-spline';
 import { VelocityScroll } from './components/ui/VelocityScroll';
 import ProjectSection from './components/sections/ProjectSection';
 import Contact from './components/sections/Contact';
 import { NavbarProvider } from './contexts/NavbarContext';
 import { AdminProvider } from './contexts/AdminContext';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
+import NeumorphismView from './components/neumorphism/NeumorphismView';
+import ThemeSwitchButton from './components/ui/neumorphism/ThemeSwitchButton';
 
-function App() {
-  // 1. State untuk mengontrol visibilitas aset 3D (default: aktif)
+function AppContent() {
+  const { isNeumorphism } = useTheme();
+
+  // State untuk mengontrol visibilitas aset 3D (default: aktif di cyberpunk)
   const [is3dEnabled, setIs3dEnabled] = useState(true);
 
-  // Fungsi untuk toggle state
   const toggle3dAssets = () => {
     setIs3dEnabled(prev => !prev);
   };
 
-  // Data untuk card statistik
+  // Data untuk card statistik cyberpunk
   const stats = [
     { icon: <FaCode />, value: "7", title: "TOTAL PROJECTS", description: "Innovative web solutions crafted" },
     { icon: <FaCertificate />, value: "6", title: "CERTIFICATES", description: "Skills validated" },
@@ -37,26 +37,35 @@ function App() {
   ];
 
   return (
-    <AdminProvider>
-      <NavbarProvider>
-        <div className="relative min-h-screen bg-[#060010] overflow-hidden">
-          {/* LAPISAN 1: BACKGROUND ANIMASI */}
-          <div className="absolute inset-0 z-0">
-            <Squares speed={0.3} squareSize={35} direction="diagonal" borderColor="rgba(255, 255, 255, 0.03)" hoverFillColor="rgba(31, 137, 187, 0.53)" />
-          </div>
-          
-          {/* 2. Tombol untuk mengaktifkan/menonaktifkan aset 3D */}
+    <>
+      {/* Floating Theme Quick-Switch Widget (Accessible on both themes) */}
+      <div className="fixed top-24 right-4 z-50 flex items-center gap-2">
+        <ThemeSwitchButton variant="floating" />
+        
+        {!isNeumorphism && (
           <button
             onClick={toggle3dAssets}
             title={`Toggle 3D Assets (${is3dEnabled ? 'On' : 'Off'})`}
-            className={`fixed top-24 right-4 z-50 p-3 rounded-full border backdrop-blur-sm transition-all duration-300 ease-in-out hover:scale-110
+            className={`p-2.5 rounded-full border backdrop-blur-sm transition-all duration-300 ease-in-out hover:scale-110
               ${is3dEnabled
                 ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-[0_0_12px_2px_#00ffdc80]'
                 : 'bg-slate-800/50 border-slate-700 text-slate-400'
               }`}
           >
-            <FaCube className="h-5 w-5" />
+            <FaCube className="h-4 w-4" />
           </button>
+        )}
+      </div>
+
+      {/* Render Theme View */}
+      {isNeumorphism ? (
+        <NeumorphismView />
+      ) : (
+        <div className="relative min-h-screen bg-[#060010] overflow-hidden">
+          {/* LAPISAN 1: BACKGROUND ANIMASI */}
+          <div className="absolute inset-0 z-0">
+            <Squares speed={0.3} squareSize={35} direction="diagonal" borderColor="rgba(255, 255, 255, 0.03)" hoverFillColor="rgba(31, 137, 187, 0.53)" />
+          </div>
 
           {/* HEADER FIXED DI ATAS MAIN */}
           <Header />
@@ -67,71 +76,65 @@ function App() {
             <section id="home" className="flex flex-col md:flex-row items-center gap-10 pt-40 pb-16 lg:pt-40 lg:pb-20">
               {/* Blok Teks */}
               <div className="flex-1 text-white space-y-6 pt-10 md:pt-18 order-last md:order-none">
-                {/* ... konten teks hero ... */}
-                <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}>
-                    <AnimatedGradientTextDemo />
-                </motion.div>
                 <motion.h1 initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.25, ease: "easeOut" }} className="text-4xl md:text-4xl font-moderniz font-bold leading-tight select-none" style={{ color: "#00ffdc", textShadow: `2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc` }}>
-                    WELCOME TO MY
-                    <span style={{ display: 'block', marginTop: '0.4em' }}>PORTFOLIO</span>
+                  WELCOME TO MY
+                  <span style={{ display: 'block', marginTop: '0.4em' }}>PORTFOLIO</span>
                 </motion.h1>
                 <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}>
-                    <GradientText colors={["#40f2ffff", "#4079ff", "#40fffcff", "#4079ff", "#40f9ffff"]} animationSpeed={3} className="custom-class font-cascadia font-bold" />
+                  <GradientText colors={["#40f2ffff", "#4079ff", "#40fffcff", "#4079ff", "#40f9ffff"]} animationSpeed={3} className="custom-class font-cascadia font-bold" />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.55, ease: "easeOut" }}>
-                    <TextGenerateEffect words={'I craft responsive and visually engaging websites using React, Tailwind CSS, and modern web technologies.'} />
+                  <TextGenerateEffect words={'I craft responsive and visually engaging websites using React, Tailwind CSS, and modern web technologies.'} />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.7, ease: "easeOut" }}>
-                    <Skills />
+                  <Skills />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 1.0, ease: "easeOut" }} className="flex flex-row gap-4 mt-8">
-                    <a href="https://github.com/andralaiskodat" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900/[0.8] text-white transition-all duration-300 hover:border-cyan-400 hover:bg-slate-800 hover:shadow-[0_0_24px_2px_#00ffdc]">
-                        <FaGithub className="h-6 w-6 text-slate-400 transition-all duration-300 group-hover:text-cyan-300" />
-                    </a>
-                    <a href="https://www.instagram.com/anndraa8._" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile" className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900/[0.8] text-white transition-all duration-300 hover:border-cyan-400 hover:bg-slate-800 hover:shadow-[0_0_24px_2px_#00ffdc]">
-                        <FaInstagram className="h-6 w-6 text-slate-400 transition-all duration-300 group-hover:text-cyan-300" />
-                    </a>
-                    <a href="https://www.linkedin.com/in/fransisko" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900/[0.8] text-white transition-all duration-300 hover:border-cyan-400 hover:bg-slate-800 hover:shadow-[0_0_24px_2px_#00ffdc]">
-                        <FaLinkedin className="h-6 w-6 text-slate-400 transition-all duration-300 group-hover:text-cyan-300" />
-                    </a>
+                  <a href="https://github.com/andralaiskodat" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900/[0.8] text-white transition-all duration-300 hover:border-cyan-400 hover:bg-slate-800 hover:shadow-[0_0_24px_2px_#00ffdc]">
+                    <FaGithub className="h-6 w-6 text-slate-400 transition-all duration-300 group-hover:text-cyan-300" />
+                  </a>
+                  <a href="https://www.instagram.com/anndraa8._" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile" className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900/[0.8] text-white transition-all duration-300 hover:border-cyan-400 hover:bg-slate-800 hover:shadow-[0_0_24px_2px_#00ffdc]">
+                    <FaInstagram className="h-6 w-6 text-slate-400 transition-all duration-300 group-hover:text-cyan-300" />
+                  </a>
+                  <a href="https://www.linkedin.com/in/fransisko" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900/[0.8] text-white transition-all duration-300 hover:border-cyan-400 hover:bg-slate-800 hover:shadow-[0_0_24px_2px_#00ffdc]">
+                    <FaLinkedin className="h-6 w-6 text-slate-400 transition-all duration-300 group-hover:text-cyan-300" />
+                  </a>
                 </motion.div>
               </div>
 
-              {/* FOTO PROFIL - Menggantikan Lanyard yang di-comment */}
+              {/* FOTO PROFIL */}
               <div className="flex-1 flex justify-center items-center order-first md:order-none">
                 <FotoProfile />
               </div>
             </section>
 
-            {/* BAGIAN ABOUT ME BARU */}
+            {/* BAGIAN ABOUT ME */}
             <section
               id="about"
               className="py-12 md:py-18 gap-0 w-full mx-0 pt-20"
               style={{ width: "100vw", position: "relative", left: "50%", right: "50%", marginLeft: "-50vw", marginRight: "-50vw" }}
             >
-              {/* ... Judul "ABOUT ME" ... */}
               <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.8, ease: "easeOut" }} className="text-center">
-                    <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mb-20">
-                        <VelocityScroll defaultVelocity={3} numRows={1} className="max-w-full">
-                            <span className="font-moderniz font-bold" style={{ fontSize: "2.5rem", lineHeight: "1.1", color: "#00ffdc", textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc", background: "none", WebkitBackgroundClip: "unset", WebkitTextFillColor: "unset", animation: "none"}}>
-                                ABOUT <span style={{ color: "#fff" }}>ME</span>
-                            </span>
-                        </VelocityScroll>
-                        <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-[#060010]"></div>
-                        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-[#060010]"></div>
-                        <VelocityScroll defaultVelocity={-3} numRows={1} className="max-w-full">
-                            <span className="font-moderniz font-bold" style={{ fontSize: "2.5rem", lineHeight: "1.1", color: "#00ffdc", textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc", background: "none", WebkitBackgroundClip: "unset", WebkitTextFillColor: "unset", animation: "none" }}>
-                                ABOUT <span style={{ color: "#fff" }}>ME</span>
-                            </span>
-                        </VelocityScroll>
-                    </div>
-                    <p className="text-lg text-cyan-200/70 mt-2 font-cascadia px-1 mb-20">
-                        ✧ Passionate about coding and creative technology ✧
-                    </p>
-                </motion.div>
+                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mb-20">
+                  <VelocityScroll defaultVelocity={3} numRows={1} className="max-w-full">
+                    <span className="font-moderniz font-bold" style={{ fontSize: "2.5rem", lineHeight: "1.1", color: "#00ffdc", textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc", background: "none", WebkitBackgroundClip: "unset", WebkitTextFillColor: "unset", animation: "none"}}>
+                      ABOUT <span style={{ color: "#fff" }}>ME</span>
+                    </span>
+                  </VelocityScroll>
+                  <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-[#060010]"></div>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-[#060010]"></div>
+                  <VelocityScroll defaultVelocity={-3} numRows={1} className="max-w-full">
+                    <span className="font-moderniz font-bold" style={{ fontSize: "2.5rem", lineHeight: "1.1", color: "#00ffdc", textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc", background: "none", WebkitBackgroundClip: "unset", WebkitTextFillColor: "unset", animation: "none" }}>
+                      ABOUT <span style={{ color: "#fff" }}>ME</span>
+                    </span>
+                  </VelocityScroll>
+                </div>
+                <p className="text-lg text-cyan-200/70 mt-2 font-cascadia px-1 mb-20">
+                  ✧ Passionate about coding and creative technology ✧
+                </p>
+              </motion.div>
 
               <div className="flex flex-col md:flex-row items-center justify-center">
-                {/* 3. Render Spline secara kondisional */}
                 {is3dEnabled && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -158,13 +161,11 @@ function App() {
                 )}
 
                 {/* KANAN: Teks & Tombol */}
-                {/* 4. Sesuaikan lebar kolom teks secara dinamis */}
                 <motion.div
                   initial={{ opacity: 0, x: -50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.9, ease: "easeOut" }}
-                  // Lebar berubah jika 3D dinonaktifkan
                   className={`text-white text-center md:text-left px-4 md:px-8 transition-all duration-700 ${is3dEnabled ? 'md:w-1/2' : 'md:w-2/3'}`}
                 >
                   <p className="text-2xl text-gray-300 font-moderniz my" style={{ textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc" }}>Hello, I'm</p>
@@ -193,7 +194,7 @@ function App() {
                 </motion.div>
               </div>
               
-              {/* ... Statistik ... */}
+              {/* Statistik */}
               <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }} className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mt-10 px-4 md:px-0">
                 {stats.map((stat, index) => (
                   <div key={index} className="group relative p-6 rounded-2xl bg-gradient-to-br from-slate-900/80 to-slate-950/70 border border-slate-800/80 shadow-lg transition-all duration-300 hover:border-cyan-400/50 hover:shadow-[0_0_24px_0px_#00ffdc50] cursor-pointer">
@@ -230,8 +231,20 @@ function App() {
             </footer>
           </main>
         </div>
-      </NavbarProvider>
-    </AdminProvider>
+      )}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AdminProvider>
+        <NavbarProvider>
+          <AppContent />
+        </NavbarProvider>
+      </AdminProvider>
+    </ThemeProvider>
   );
 }
 

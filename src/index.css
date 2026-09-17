@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cascadia+Code&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Cascadia+Code&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -18,10 +17,25 @@
 
 @layer base {
   body {
-    background-color: #060010; /* Menetapkan warna latar belakang default */
+    background-color: #060010;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
+
+  body.theme-neumorphism {
+    background-color: #E8ECF1 !important;
+    color: #2E3440 !important;
+  }
+
   .font-poppins {
     font-family: 'Poppins', sans-serif;
+  }
+
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .font-space {
+    font-family: 'Space Grotesk', sans-serif;
   }
 
   .font-cascadia {
