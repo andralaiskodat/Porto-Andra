@@ -70,7 +70,7 @@ export const NeuSkills = () => {
             Skills & Technologies
           </h2>
           <p className="text-neu-secondary text-sm sm:text-base max-w-xl mx-auto">
-            Tools, libraries, and frameworks I leverage to engineer robust digital experiences.
+            Teknologi, bahasa pemrograman, dan tools yang saya gunakan dalam membangun aplikasi web.
           </p>
         </div>
 

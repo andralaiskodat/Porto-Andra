@@ -166,10 +166,10 @@ export const NeuContact = () => {
             <span>Get in Touch</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-neu-primary tracking-tight">
-            Let's Collaborate & Build
+            Hubungi Saya
           </h2>
           <p className="text-neu-secondary text-sm sm:text-base max-w-xl mx-auto">
-            Have a project in mind, an opportunity to discuss, or just want to say hi? Drop a message below.
+            Tertarik untuk berdiskusi tentang proyek, peluang kerja sama, atau sekadar bertukar ide? Silakan kirim pesan melalui form di bawah.
           </p>
         </div>
 
@@ -219,7 +219,7 @@ export const NeuContact = () => {
 
               <div className="pt-4 border-t border-slate-300/40">
                 <span className="text-xs font-semibold text-neu-secondary uppercase tracking-wider block mb-3">
-                  Official Channels:
+                  Social Media & Profil:
                 </span>
                 <div className="flex gap-3">
                   <a

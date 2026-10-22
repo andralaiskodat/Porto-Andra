@@ -70,7 +70,7 @@ export const initialProjects = [
   {
     id: "proj-3",
     title: "Sistem Deteksi Penyakit Tanaman Tomat",
-    description: "Membuat Aplikasi web untuk mendeteksi penyakit pada tanaman tomat melalui daun menggunakan model ML dilengkapi dangan fitur Chat AI.",
+    description: "Aplikasi web untuk mendeteksi penyakit tanaman tomat berbasis model machine learning dilengkapi fitur asisten interaktif.",
     tech: ["Python", "Flask", "React"],
     link: "https://drive.google.com/file/d/1XOajDgZBGIz4tQ039mac9WD_vSYYGwGU/view?usp=sharing",
     image: "/certificate-images/Picture_Tomadetect.png",

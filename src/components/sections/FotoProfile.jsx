@@ -4,14 +4,21 @@ import ANDRA from '../../assets/images/ANDRA.jpg';
 
 const FotoProfile = () => {
   const cardRef = useRef(null);
+  const rectRef = useRef(null);
   const [transform, setTransform] = useState({ rotateX: 0, rotateY: 0, glowX: 50, glowY: 50 });
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleMouseMove = (e) => {
-    const card = cardRef.current;
-    if (!card) return;
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    if (cardRef.current) {
+      rectRef.current = cardRef.current.getBoundingClientRect();
+    }
+  };
 
-    const rect = card.getBoundingClientRect();
+  const handleMouseMove = (e) => {
+    const rect = rectRef.current || (cardRef.current && cardRef.current.getBoundingClientRect());
+    if (!rect) return;
+
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
@@ -31,6 +38,7 @@ const FotoProfile = () => {
 
   const handleMouseLeave = () => {
     setIsHovered(false);
+    rectRef.current = null;
     setTransform({ rotateX: 0, rotateY: 0, glowX: 50, glowY: 50 });
   };
 
@@ -57,7 +65,7 @@ const FotoProfile = () => {
       <div
         ref={cardRef}
         onMouseMove={handleMouseMove}
-        onMouseEnter={() => setIsHovered(true)}
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         className="relative w-72 h-80 md:w-[370px] md:h-[450px] lg:w-[410px] lg:h-[500px] rounded-2xl overflow-hidden cursor-pointer"
         style={{

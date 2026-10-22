@@ -10,7 +10,7 @@ import NeuFooter from './NeuFooter';
 
 export const NeumorphismView = () => {
   return (
-    <div className="min-h-screen bg-[#E8ECF1] text-neu-primary transition-colors duration-400">
+    <div className="min-h-screen bg-[#E8ECF1] text-neu-primary transition-colors duration-400 overflow-x-hidden">
       {/* Floating Neumorphic Header */}
       <NeuHeader />
 

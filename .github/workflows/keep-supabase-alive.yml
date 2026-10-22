@@ -1,0 +1,56 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    # 00:00 UTC / 07:00 WIB on odd-numbered days of each month.
+    - cron: '0 0 */2 * *'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: keep-supabase-alive
+  cancel-in-progress: false
+
+jobs:
+  keep-alive:
+    name: Ping Supabase REST API
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Send heartbeat to Supabase
+        env:
+          # Public client configuration from .env; never use a service_role key here.
+          # GitHub Secrets take precedence over the matching public fallback.
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.VITE_SUPABASE_URL || 'https://thswhzsuwuvyratqjjde.supabase.co' }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || secrets.VITE_SUPABASE_ANON_KEY || secrets.VITE_SUPABASE_PUBLISHABLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoc3doenN1d3V2eXJhdHFqamRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwMTE1OTYsImV4cCI6MjEwMzU4NzU5Nn0.i1jK2apWKFiEzTi4KiTC-x71FGMK-MJfcl8CkpNq_0U' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "$SUPABASE_URL" || -z "$SUPABASE_ANON_KEY" ]]; then
+            echo "::error::Supabase URL or public API key is missing."
+            exit 1
+          fi
+
+          # projects exists in supabase_schema.sql and allows public SELECT.
+          headers=(-H "apikey: ${SUPABASE_ANON_KEY}")
+          # Publishable keys use apikey only; JWT anon keys also support Bearer.
+          if [[ "$SUPABASE_ANON_KEY" == eyJ* ]]; then
+            headers+=(-H "Authorization: Bearer ${SUPABASE_ANON_KEY}")
+          fi
+
+          if ! HTTP_STATUS=$(curl --silent --show-error --output /dev/null --write-out "%{http_code}" \
+            --connect-timeout 10 --max-time 30 \
+            --retry 3 --retry-delay 5 --retry-max-time 120 --retry-connrefused \
+            "${headers[@]}" \
+            "${SUPABASE_URL%/}/rest/v1/projects?select=id&limit=1"); then
+            echo "::error::Could not reach the Supabase REST API after retries."
+            exit 1
+          fi
+
+          echo "Supabase HTTP response: ${HTTP_STATUS}"
+          case "$HTTP_STATUS" in
+            200|206) echo "Heartbeat succeeded." ;;
+            *) echo "::error::Heartbeat failed (HTTP ${HTTP_STATUS}). Check project status, API key, and projects SELECT policy."; exit 1 ;;
+          esac

@@ -46,7 +46,7 @@ export const NeuProjects = () => {
             Recent Projects & Work
           </h2>
           <p className="text-neu-secondary text-sm sm:text-base max-w-xl mx-auto">
-            A curated selection of web applications, platforms, and designs built with passion and precision.
+            Koleksi aplikasi web, platform digital, dan desain yang telah saya kerjakan.
           </p>
         </div>
 

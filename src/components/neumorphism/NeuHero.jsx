@@ -26,8 +26,7 @@ export const NeuHero = () => {
             {/* Status Pill Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8ECF1] shadow-neu-inset text-xs font-semibold text-neu-primary">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10B981] animate-pulse" />
-              <span>Full Stack & Front End Specialist</span>
-              <span className="text-neu-accent">✦</span>
+              <span>Full Stack & Frontend Developer</span>
             </div>
 
             {/* Main Heading */}
@@ -46,7 +45,7 @@ export const NeuHero = () => {
             {/* Summary Bio */}
             <p className="text-neu-secondary text-base sm:text-lg leading-relaxed max-w-xl">
               Bachelor of Informatics graduate from <strong className="text-neu-primary font-semibold">Amikom University Yogyakarta</strong>. 
-              I design and build tactile, high-performance web applications with React, Tailwind CSS, and clean modern architecture.
+              Focused on developing responsive, modern, and high-performance web applications using React, Next.js, and Tailwind CSS.
             </p>
 
             {/* CTA Buttons */}
@@ -173,7 +172,7 @@ export const NeuHero = () => {
                   </div>
                   <div className="p-3 rounded-2xl bg-[#E8ECF1] shadow-neu-inset flex flex-col items-center text-center">
                     <span className="text-2xl font-extrabold text-[#F2739E]">3+</span>
-                    <span className="text-[11px] font-medium text-neu-secondary mt-0.5">Years Journey</span>
+                    <span className="text-[11px] font-medium text-neu-secondary mt-0.5">Years Experience</span>
                   </div>
                 </div>
               </NeuCard>

@@ -232,7 +232,7 @@ export const ThemeSwitchButton = ({ className = '' }) => {
             {/* Footer Notice */}
             <div className="mt-3 pt-3 border-t border-slate-300/30 dark:border-slate-800/80 text-center">
               <span className={`text-[10px] font-medium ${isNeumorphism ? 'text-neu-secondary' : 'text-slate-500'}`}>
-                ✦ 3 more custom themes coming soon
+                3 pilihan tema baru segera hadir
               </span>
             </div>
           </motion.div>

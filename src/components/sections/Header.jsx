@@ -137,7 +137,7 @@ const Header = () => {
                         FRANSISKO A. LAISKODAT
                       </h1>
                       <p className="font-moderniz text-[8px] sm:text-[9px] text-[#000754] whitespace-nowrap" style={{ textShadow: '0.5px 0.5px 0 #00ffdc, -0.5px -0.5px 0 #00ffdc, 0.5px -0.5px 0 #00ffdc, -0.5px 0.5px 0 #00ffdc' }}>
-                        Let's see the awesome Experience
+                        Web Developer & Informatics
                       </p>
                     </div>
                   </a>
@@ -161,7 +161,7 @@ const Header = () => {
                     <div className="block">
                       <h1 className="font-moderniz text-base text-[#2d81e0]">Fransisko Andrade Laiskodat</h1>
                       <p className="font-moderniz text-[12px] text-[#000754]" style={{ textShadow: '0.5px 0.5px 0 #2d81e0, -0.5px -0.5px 0 #2d81e0, 0.5px -0.5px 0 #2d81e0, -0.5px 0.5px 0 #2d81e0' }}>
-                        Let's see the awesome Experience
+                        Web Developer & Informatics
                       </p>
                     </div>
                   </a>

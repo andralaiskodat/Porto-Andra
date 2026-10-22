@@ -10,21 +10,21 @@ export const NeuAbout = () => {
       icon: <FaCode className="text-xl text-neu-accent" />,
       value: '7+',
       title: 'Total Projects',
-      description: 'Innovative web solutions crafted with modern stacks',
+      description: 'Aplikasi web dan sistem yang telah dibangun',
       color: 'from-[#7C6EF2]/10 to-[#7C6EF2]/5',
     },
     {
       icon: <FaCertificate className="text-xl text-[#F2739E]" />,
       value: '6',
       title: 'Certificates',
-      description: 'Validated academic & industry competencies',
+      description: 'Sertifikat kompetensi, praktikum & kursus resmi',
       color: 'from-[#F2739E]/10 to-[#F2739E]/5',
     },
     {
       icon: <FaGlobe className="text-xl text-emerald-500" />,
       value: '3+',
       title: 'Years Experience',
-      description: 'Continuous web development & learning journey',
+      description: 'Pengalaman praktis pengembangan web',
       color: 'from-emerald-500/10 to-emerald-500/5',
     },
   ];
@@ -39,10 +39,10 @@ export const NeuAbout = () => {
             <span>About Me</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-neu-primary tracking-tight">
-            Passionate About Code & Design
+            About Me & Background
           </h2>
           <p className="text-neu-secondary text-sm sm:text-base max-w-2xl mx-auto">
-            Get to know my professional journey, technical expertise, and vision in modern software development.
+            Latar belakang pendidikan, keahlian teknis, dan pengalaman praktis dalam rekayasa perangkat lunak.
           </p>
         </div>
 
@@ -75,13 +75,13 @@ export const NeuAbout = () => {
             {/* Right Column: Full Detailed Bio */}
             <div className="lg:col-span-8 space-y-4 text-neu-secondary text-sm sm:text-base leading-relaxed text-justify">
               <p>
-                Bachelor of Informatics graduate from <strong className="text-neu-primary font-semibold">Amikom University Yogyakarta</strong> with a dedicated focus on web development and data analysis. Experienced in building web applications and processing data to engineer technology-driven solutions.
+                Lulusan S1 Informatika dari <strong className="text-neu-primary font-semibold">Universitas Amikom Yogyakarta</strong> dengan fokus pada pengembangan web dan analisis data. Berpengalaman membangun aplikasi web responsif mulai dari landing page UMKM, sistem POS restoran (RestoPOS), hingga implementasi machine learning untuk deteksi penyakit daun tomat.
               </p>
               <p>
-                As a <strong className="text-neu-primary font-semibold">Full Stack Developer specializing in Front End Development</strong>, I develop modern, responsive, and tactile web interfaces using React, Next.js, and Tailwind CSS.
+                Sebagai <strong className="text-neu-primary font-semibold">Full Stack Developer dengan spesialisasi Frontend</strong>, saya berfokus pada performa tinggi, struktur kode yang bersih, dan kenyamanan pengguna dengan memanfaatkan React, Next.js, JavaScript, dan Tailwind CSS.
               </p>
               <p>
-                Adept at working both collaboratively and independently with strong analytical, communication, and problem-solving skills. Highly committed to continuous self-development and ready to create meaningful impact.
+                Mampu berkolaborasi dalam tim maupun bekerja secara mandiri dengan kemampuan komunikasi dan pemecahan masalah yang baik, adaptif terhadap perkembangan teknologi, dan berorientasi pada hasil yang nyata.
               </p>
 
               <div className="flex flex-wrap gap-4 pt-4 justify-start">

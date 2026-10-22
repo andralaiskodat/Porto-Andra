@@ -19,15 +19,15 @@ const Squares = ({
     const ctx = canvas.getContext("2d");
 
     const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
 
-    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("resize", resizeCanvas, { passive: true });
     resizeCanvas();
 
     const draw = (timestamp) => {
-      if (!ctx) return;
+      if (!ctx || canvas.width === 0 || canvas.height === 0) return;
 
       timeRef.current = timestamp / 5000;
 
@@ -98,18 +98,16 @@ const Squares = ({
       requestRef.current = requestAnimationFrame(updateAnimation);
     };
 
-    // Ambil posisi mouse dari window, bukan dari canvas
+    // Ambil posisi mouse langsung dari koordinat viewport tanpa getBoundingClientRect
     const handleMouseMove = (event) => {
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = event.clientX - rect.left;
-      const mouseY = event.clientY - rect.top;
+      const mouseX = event.clientX;
+      const mouseY = event.clientY;
 
-      // Jika mouse di luar canvas, jangan highlight
       if (
-        event.clientX < rect.left ||
-        event.clientX > rect.right ||
-        event.clientY < rect.top ||
-        event.clientY > rect.bottom
+        mouseX < 0 ||
+        mouseX > window.innerWidth ||
+        mouseY < 0 ||
+        mouseY > window.innerHeight
       ) {
         hoveredSquareRef.current = null;
         return;
@@ -130,13 +128,12 @@ const Squares = ({
       }
     };
 
-    const handleMouseLeave = (event) => {
+    const handleMouseLeave = () => {
       hoveredSquareRef.current = null;
     };
 
-    // Ganti event listener ke window
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseout", handleMouseLeave);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("mouseout", handleMouseLeave, { passive: true });
 
     requestRef.current = requestAnimationFrame(updateAnimation);
 

@@ -59,13 +59,13 @@ export const NeuCertificates = () => {
         {/* Section Header */}
         <div className="text-center space-y-3 mb-14">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#E8ECF1] shadow-neu-inset text-xs font-semibold text-neu-accent uppercase tracking-wider">
-            <span>Verified Credentials</span>
+            <span>Certificates</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-neu-primary tracking-tight">
             Certifications & Honors
           </h2>
           <p className="text-neu-secondary text-sm sm:text-base max-w-xl mx-auto">
-            Academic practicum assistantships, competitions, and specialized industry accreditations.
+            Sertifikat asisten praktikum, kejuaraan kompetisi, dan pelatihan pengembangan web.
           </p>
         </div>
 

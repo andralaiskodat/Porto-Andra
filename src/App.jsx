@@ -1,5 +1,6 @@
 // src/App.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Lenis from 'lenis';
 import Header from './components/sections/Header';
 import Squares from './components/ui/Squares';
 import TextGenerateEffect from "./components/ui/text-generate-effect";
@@ -22,6 +23,30 @@ import ThemeSwitchButton from './components/ui/neumorphism/ThemeSwitchButton';
 function AppContent() {
   const { isNeumorphism } = useTheme();
 
+  // Inisialisasi Lenis smooth scroll untuk navigasi super halus tanpa patah-patah
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.5,
+    });
+
+    let rafId;
+    function raf(time) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
+  }, []);
+
   // State untuk mengontrol visibilitas aset 3D (default: aktif di cyberpunk)
   const [is3dEnabled, setIs3dEnabled] = useState(true);
 
@@ -29,11 +54,11 @@ function AppContent() {
     setIs3dEnabled(prev => !prev);
   };
 
-  // Data untuk card statistik cyberpunk
+  // Data untuk card statistik cyberpunk (deskripsi natural tanpa AI buzzwords)
   const stats = [
-    { icon: <FaCode />, value: "7", title: "TOTAL PROJECTS", description: "Innovative web solutions crafted" },
-    { icon: <FaCertificate />, value: "6", title: "CERTIFICATES", description: "Skills validated" },
-    { icon: <FaGlobe />, value: "3", title: "YEARS OF EXPERIENCE", description: "Continuous learning journey" },
+    { icon: <FaCode />, value: "7", title: "TOTAL PROJECTS", description: "Web applications & systems built" },
+    { icon: <FaCertificate />, value: "6", title: "CERTIFICATES", description: "Official course & practicum credentials" },
+    { icon: <FaGlobe />, value: "3", title: "YEARS OF EXPERIENCE", description: "Hands-on software development experience" },
   ];
 
   return (
@@ -61,10 +86,10 @@ function AppContent() {
       {isNeumorphism ? (
         <NeumorphismView />
       ) : (
-        <div className="relative min-h-screen bg-[#060010] overflow-hidden">
-          {/* LAPISAN 1: BACKGROUND ANIMASI */}
-          <div className="absolute inset-0 z-0">
-            <Squares speed={0.3} squareSize={35} direction="diagonal" borderColor="rgba(255, 255, 255, 0.03)" hoverFillColor="rgba(31, 137, 187, 0.53)" />
+        <div className="relative min-h-screen bg-[#060010] overflow-x-hidden">
+          {/* LAPISAN 1: BACKGROUND ANIMASI FIXED (Mengurangi beban GPU secara drastis untuk scroll yang sangat halus) */}
+          <div className="fixed inset-0 z-0 pointer-events-none">
+            <Squares speed={0.3} squareSize={40} direction="diagonal" borderColor="rgba(255, 255, 255, 0.03)" hoverFillColor="rgba(31, 137, 187, 0.53)" />
           </div>
 
           {/* HEADER FIXED DI ATAS MAIN */}
@@ -84,7 +109,7 @@ function AppContent() {
                   <GradientText colors={["#40f2ffff", "#4079ff", "#40fffcff", "#4079ff", "#40f9ffff"]} animationSpeed={3} className="custom-class font-cascadia font-bold" />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.55, ease: "easeOut" }}>
-                  <TextGenerateEffect words={'I craft responsive and visually engaging websites using React, Tailwind CSS, and modern web technologies.'} />
+                  <TextGenerateEffect words={'Full Stack & Frontend Developer specializing in clean, responsive, and high-performance web applications using React, Next.js, and modern tools.'} />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.7, ease: "easeOut" }}>
                   <Skills />
@@ -130,7 +155,7 @@ function AppContent() {
                   </VelocityScroll>
                 </div>
                 <p className="text-lg text-cyan-200/70 mt-2 font-cascadia px-1 mb-20">
-                  ✧ Passionate about coding and creative technology ✧
+                  Passionate about building functional web applications and data solutions
                 </p>
               </motion.div>
 
@@ -143,7 +168,7 @@ function AppContent() {
                     transition={{ duration: 0.9, ease: "easeOut", delay: 0.2 }}
                     className="md:w-1/3 flex justify-center"
                   >
-                    <div className="w-full h-[420px] md:h-[530px] flex items-center justify-center relative overflow-hidden">
+                    <div className="w-full h-[420px] md:h-[530px] flex items-center justify-center relative overflow-hidden" style={{ contain: 'paint' }}>
                       <Spline 
                         scene="https://prod.spline.design/FcZ66SFMX1YbF-0I/scene.splinecode" 
                         onLoad={() => {
@@ -171,14 +196,11 @@ function AppContent() {
                   <p className="text-2xl text-gray-300 font-moderniz my" style={{ textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc" }}>Hello, I'm</p>
                   <h3 className="text-4xl font-bold text-white my-2 font-moderniz" style={{ textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc" }}>Fransisko Andrade Laiskodat</h3>
                   <p className="text-white/80 leading-relaxed mt-4 font-cascadia text-justify">
-                    Bachelor of Informatics graduate from Amikom University Yogyakarta with a focus on web development
-                    and data analysis. Experienced in building web applications and processing as well as analyzing data to
-                    create technology-based solutions. A Full Stack Developer specializing in Front End Development,
-                    experienced in developing modern, responsive, and interactive web interfaces using the latest web
-                    technologies. Able to work both collaboratively and independently with strong communication, analytical,
-                    and problem-solving skills. Result-oriented, adaptive to new technologies, and highly committed to
-                    continuous self-development. Ready to contribute as a Front End Developer, Full Stack Web Developer,
-                    or Data Analyst.
+                    Informatics graduate from Amikom University Yogyakarta with a dedicated focus on Web Development
+                    and Data Analysis. Experienced in building responsive web applications with React, Next.js, and Node.js,
+                    and developing practical, data-informed digital solutions. Passionate about clean frontend architecture,
+                    responsive design, and solid problem-solving. Ready to contribute effectively as a Frontend Developer,
+                    Full Stack Web Developer, or Data Analyst.
                   </p>
                   <div className="my-6 bg-slate-900/50 border-l-4 border-[#00ffdc] p-4 rounded-r-lg italic text-white/70 font-cascadia">
                     "Whoever strives shall succeed."
