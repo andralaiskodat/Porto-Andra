@@ -56,24 +56,28 @@ export const THEME_OPTIONS = [
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
+  // Selalu default ke Cyberpunk saat seseorang pertama kali berkunjung ke website
   const [theme, setThemeState] = useState(() => {
     try {
-      const savedTheme = localStorage.getItem('portfolioTheme');
+      // Hapus cache persisten lama di localStorage agar pengunjung baru/kembali tidak terkunci di tema lain
+      localStorage.removeItem('portfolioTheme');
+
+      const savedTheme = sessionStorage.getItem('portfolioTheme');
       if (savedTheme === THEMES.NEUMORPHISM || savedTheme === THEMES.CYBERPUNK) {
         return savedTheme;
       }
     } catch (e) {
-      console.warn('Failed to access localStorage for theme:', e);
+      console.warn('Failed to access storage for theme:', e);
     }
-    return THEMES.CYBERPUNK; // default theme
+    return THEMES.CYBERPUNK; // Tampilan default saat orang berkunjung adalah Cyberpunk
   });
 
   const setTheme = (newTheme) => {
     setThemeState(newTheme);
     try {
-      localStorage.setItem('portfolioTheme', newTheme);
+      sessionStorage.setItem('portfolioTheme', newTheme);
     } catch (e) {
-      console.warn('Failed to write theme to localStorage:', e);
+      console.warn('Failed to write theme to sessionStorage:', e);
     }
   };
 
@@ -81,7 +85,7 @@ export const ThemeProvider = ({ children }) => {
     setThemeState(prev => {
       const nextTheme = prev === THEMES.CYBERPUNK ? THEMES.NEUMORPHISM : THEMES.CYBERPUNK;
       try {
-        localStorage.setItem('portfolioTheme', nextTheme);
+        sessionStorage.setItem('portfolioTheme', nextTheme);
       } catch (e) {}
       return nextTheme;
     });
