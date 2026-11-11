@@ -1,7 +1,9 @@
 import React from 'react';
+import { useProfile } from '../../contexts/ProfileContext';
 
 const Skills = () => {
-  const skillsList = ['React','Next.js', 'Javascript', 'Node.js', 'Tailwind'];
+  const { profile } = useProfile();
+  const skillsList = profile.skills.split(',').map(skill => skill.trim()).filter(Boolean);
 
   return (
     <div className="flex flex-row flex-wrap gap-3 mt-6 justify-left w-full">

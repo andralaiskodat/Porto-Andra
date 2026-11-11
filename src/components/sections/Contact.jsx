@@ -19,6 +19,8 @@ import { SiTiktok } from 'react-icons/si';
 import AdminProjects from '../admin/AdminProjects';
 import AdminMessages from '../admin/AdminMessages';
 import AdminComments from '../admin/AdminComments';
+import AdminProfile from '../admin/AdminProfile';
+import { useProfile } from '../../contexts/ProfileContext';
 import AdminLogin from '../admin/AdminLogin';
 import { useAdmin } from '../../contexts/AdminContext';
 
@@ -26,6 +28,7 @@ import { useAdmin } from '../../contexts/AdminContext';
 const COMMENTS_FILE = '/comments.json';
 
 const Contact = () => {
+  const { profile } = useProfile();
   // States untuk contact form
   const [contactForm, setContactForm] = useState({
     name: '',
@@ -141,21 +144,21 @@ const Contact = () => {
     {
       name: 'GitHub',
       icon: <FaGithub />,
-      url: 'https://github.com/andralaiskodat',
+      url: profile.github,
       color: 'from-gray-600 to-gray-800',
       hoverColor: 'hover:shadow-gray-500/25'
     },
     {
       name: 'Instagram',
       icon: <FaInstagram />,
-      url: 'https://www.instagram.com/anndraa8._',
+      url: profile.instagram,
       color: 'from-pink-500 to-purple-600',
       hoverColor: 'hover:shadow-pink-500/25'
     },
     {
       name: 'LinkedIn',
       icon: <FaLinkedin />,
-      url: 'https://www.linkedin.com/in/fransisko',
+      url: profile.linkedin,
       color: 'from-blue-600 to-blue-800',
       hoverColor: 'hover:shadow-blue-500/25'
     }
@@ -491,6 +494,7 @@ const Contact = () => {
 
       {/* Admin Modals */}
       <AnimatePresence>
+        {isAdminOpen && adminView === 'profile' && <AdminProfile isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} onNavigate={setAdminView} />}
         {isAdminOpen && adminView === 'projects' && (
           <AdminProjects
             isOpen={isAdminOpen}

@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import ANDRA from '../../assets/images/ANDRA.jpg';
+import { useProfile } from '../../contexts/ProfileContext';
 
 const FotoProfile = () => {
+  const { profile } = useProfile();
   const cardRef = useRef(null);
   const rectRef = useRef(null);
   const [transform, setTransform] = useState({ rotateX: 0, rotateY: 0, glowX: 50, glowY: 50 });
@@ -79,8 +80,8 @@ const FotoProfile = () => {
       >
         {/* Photo */}
         <img
-          src={ANDRA}
-          alt="Fransisko Andrade Laiskodat"
+          src={profile.photo}
+          alt={profile.name}
           className="w-full h-full object-cover"
           style={{ transform: 'translateZ(0)' }}
         />
@@ -114,7 +115,7 @@ const FotoProfile = () => {
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
             <span className="text-xs font-medium text-white/85 tracking-widest uppercase font-cascadia">
-              Fransisko Andrade Laiskodat
+              {profile.name}
             </span>
           </div>
         </div>

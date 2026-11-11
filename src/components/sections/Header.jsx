@@ -8,11 +8,14 @@ import AdminLogin from '../admin/AdminLogin';
 import AdminProjects from '../admin/AdminProjects';
 import AdminMessages from '../admin/AdminMessages';
 import AdminComments from '../admin/AdminComments';
+import AdminProfile from '../admin/AdminProfile';
+import { useProfile } from '../../contexts/ProfileContext';
 
 const CLIP_PATH =
   'polygon(0 0, 100% 0, 100% 80%, 68% 80%, 64% 100%, 36% 100%, 32% 80%, 0 80%)';
 
 const Header = () => {
+  const { profile } = useProfile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
@@ -134,10 +137,10 @@ const Header = () => {
                     <img src={bangzenLogo} alt="Bangzen Logo" className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0" />
                     <div className="min-w-0">
                       <h1 className="font-moderniz text-xs sm:text-sm text-[#0077ff] tracking-tight whitespace-nowrap">
-                        FRANSISKO A. LAISKODAT
+                        {profile.name}
                       </h1>
                       <p className="font-moderniz text-[8px] sm:text-[9px] text-[#000754] whitespace-nowrap" style={{ textShadow: '0.5px 0.5px 0 #00ffdc, -0.5px -0.5px 0 #00ffdc, 0.5px -0.5px 0 #00ffdc, -0.5px 0.5px 0 #00ffdc' }}>
-                        Web Developer & Informatics
+                        {profile.subtitle}
                       </p>
                     </div>
                   </a>
@@ -159,9 +162,9 @@ const Header = () => {
                   <a href="#home" className="flex items-center gap-3">
                     <img src={bangzenLogo} alt="Bangzen Logo" className="h-12 w-12" />
                     <div className="block">
-                      <h1 className="font-moderniz text-base text-[#2d81e0]">Fransisko Andrade Laiskodat</h1>
+                      <h1 className="font-moderniz text-base text-[#2d81e0]">{profile.name}</h1>
                       <p className="font-moderniz text-[12px] text-[#000754]" style={{ textShadow: '0.5px 0.5px 0 #2d81e0, -0.5px -0.5px 0 #2d81e0, 0.5px -0.5px 0 #2d81e0, -0.5px 0.5px 0 #2d81e0' }}>
-                        Web Developer & Informatics
+                        {profile.subtitle}
                       </p>
                     </div>
                   </a>
@@ -248,6 +251,8 @@ const Header = () => {
           onNavigate={(view) => setAdminView(view)}
         />
       )}
+
+      {adminView === 'profile' && <AdminProfile isOpen={showAdminDashboard} onClose={handleCloseAdminDashboard} onNavigate={setAdminView} />}
 
       {/* Animasi gradient keyframes */}
       <style>

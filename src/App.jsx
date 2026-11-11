@@ -16,12 +16,10 @@ import ProjectSection from './components/sections/ProjectSection';
 import Contact from './components/sections/Contact';
 import { NavbarProvider } from './contexts/NavbarContext';
 import { AdminProvider } from './contexts/AdminContext';
-import { ThemeProvider, useTheme } from './contexts/ThemeContext';
-import NeumorphismView from './components/neumorphism/NeumorphismView';
-import ThemeSwitchButton from './components/ui/neumorphism/ThemeSwitchButton';
+import { ProfileProvider, useProfile } from './contexts/ProfileContext';
 
 function AppContent() {
-  const { isNeumorphism } = useTheme();
+  const { profile } = useProfile();
 
   // Inisialisasi Lenis smooth scroll untuk navigasi super halus tanpa patah-patah
   useEffect(() => {
@@ -65,9 +63,7 @@ function AppContent() {
     <>
       {/* Floating Theme Quick-Switch Widget (Accessible on both themes) */}
       <div className="fixed top-24 right-4 z-50 flex items-center gap-2">
-        <ThemeSwitchButton variant="floating" />
-        
-        {!isNeumorphism && (
+
           <button
             onClick={toggle3dAssets}
             title={`Toggle 3D Assets (${is3dEnabled ? 'On' : 'Off'})`}
@@ -79,13 +75,7 @@ function AppContent() {
           >
             <FaCube className="h-4 w-4" />
           </button>
-        )}
       </div>
-
-      {/* Render Theme View */}
-      {isNeumorphism ? (
-        <NeumorphismView />
-      ) : (
         <div className="relative min-h-screen bg-[#060010] overflow-x-hidden">
           {/* LAPISAN 1: BACKGROUND ANIMASI FIXED (Mengurangi beban GPU secara drastis untuk scroll yang sangat halus) */}
           <div className="fixed inset-0 z-0 pointer-events-none">
@@ -109,19 +99,19 @@ function AppContent() {
                   <GradientText colors={["#40f2ffff", "#4079ff", "#40fffcff", "#4079ff", "#40f9ffff"]} animationSpeed={3} className="custom-class font-cascadia font-bold" />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.55, ease: "easeOut" }}>
-                  <TextGenerateEffect words={'Full Stack & Frontend Developer specializing in clean, responsive, and high-performance web applications using React, Next.js, and modern tools.'} />
+                  <TextGenerateEffect words={profile.heroDescription} />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.7, ease: "easeOut" }}>
                   <Skills />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 1.0, ease: "easeOut" }} className="flex flex-row gap-4 mt-8">
-                  <a href="https://github.com/andralaiskodat" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900/[0.8] text-white transition-all duration-300 hover:border-cyan-400 hover:bg-slate-800 hover:shadow-[0_0_24px_2px_#00ffdc]">
+                  <a href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900/[0.8] text-white transition-all duration-300 hover:border-cyan-400 hover:bg-slate-800 hover:shadow-[0_0_24px_2px_#00ffdc]">
                     <FaGithub className="h-6 w-6 text-slate-400 transition-all duration-300 group-hover:text-cyan-300" />
                   </a>
-                  <a href="https://www.instagram.com/anndraa8._" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile" className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900/[0.8] text-white transition-all duration-300 hover:border-cyan-400 hover:bg-slate-800 hover:shadow-[0_0_24px_2px_#00ffdc]">
+                  <a href={profile.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile" className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900/[0.8] text-white transition-all duration-300 hover:border-cyan-400 hover:bg-slate-800 hover:shadow-[0_0_24px_2px_#00ffdc]">
                     <FaInstagram className="h-6 w-6 text-slate-400 transition-all duration-300 group-hover:text-cyan-300" />
                   </a>
-                  <a href="https://www.linkedin.com/in/fransisko" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900/[0.8] text-white transition-all duration-300 hover:border-cyan-400 hover:bg-slate-800 hover:shadow-[0_0_24px_2px_#00ffdc]">
+                  <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-slate-700 bg-slate-900/[0.8] text-white transition-all duration-300 hover:border-cyan-400 hover:bg-slate-800 hover:shadow-[0_0_24px_2px_#00ffdc]">
                     <FaLinkedin className="h-6 w-6 text-slate-400 transition-all duration-300 group-hover:text-cyan-300" />
                   </a>
                 </motion.div>
@@ -155,7 +145,7 @@ function AppContent() {
                   </VelocityScroll>
                 </div>
                 <p className="text-lg text-cyan-200/70 mt-2 font-cascadia px-1 mb-20">
-                  Passionate about building functional web applications and data solutions
+                  {profile.aboutTagline}
                 </p>
               </motion.div>
 
@@ -194,19 +184,15 @@ function AppContent() {
                   className={`text-white text-center md:text-left px-4 md:px-8 transition-all duration-700 ${is3dEnabled ? 'md:w-1/2' : 'md:w-2/3'}`}
                 >
                   <p className="text-2xl text-gray-300 font-moderniz my" style={{ textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc" }}>Hello, I'm</p>
-                  <h3 className="text-4xl font-bold text-white my-2 font-moderniz" style={{ textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc" }}>Fransisko Andrade Laiskodat</h3>
+                  <h3 className="text-4xl font-bold text-white my-2 font-moderniz" style={{ textShadow: "2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc" }}>{profile.name}</h3>
                   <p className="text-white/80 leading-relaxed mt-4 font-cascadia text-justify">
-                    Informatics graduate from Amikom University Yogyakarta with a dedicated focus on Web Development
-                    and Data Analysis. Experienced in building responsive web applications with React, Next.js, and Node.js,
-                    and developing practical, data-informed digital solutions. Passionate about clean frontend architecture,
-                    responsive design, and solid problem-solving. Ready to contribute effectively as a Frontend Developer,
-                    Full Stack Web Developer, or Data Analyst.
+                    {profile.aboutDescription}
                   </p>
                   <div className="my-6 bg-slate-900/50 border-l-4 border-[#00ffdc] p-4 rounded-r-lg italic text-white/70 font-cascadia">
-                    "Whoever strives shall succeed."
+                    “{profile.quote}”
                   </div>
                   <div className="flex flex-row sm:flex-row gap-4 mt-8 justify-center md:justify-start items-center">
-                    <ButtonMovingBorder as="a" href="/certificates/CV Andra.pdf" download="CV Andra.pdf" duration={3000} borderRadius="0.75rem" className="bg-slate-900/[0.8] border border-slate-800 text-white font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-[0_0_24px_8px_#40ffaa]">
+                    <ButtonMovingBorder as="a" href={profile.cvUrl} download="CV Andra.pdf" duration={3000} borderRadius="0.75rem" className="bg-slate-900/[0.8] border border-slate-800 text-white font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-[0_0_24px_8px_#40ffaa]">
                       <FaDownload /> Download CV
                     </ButtonMovingBorder>
                     <ButtonMovingBorder as="a" href="#projects" duration={3000} borderRadius="0.75rem" className="bg-slate-900/[0.8] border border-slate-800 text-white font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-[0_0_24px_8px_#40ffaa]">
@@ -248,25 +234,24 @@ function AppContent() {
 
             {/* FOOTER */}
             <footer className="py-8 text-center text-gray-400">
-              <div className="text-sm">© {new Date().getFullYear()} Fransisko Andrade Laiskodat. All rights reserved.</div>
+              <div className="text-sm">© {new Date().getFullYear()} {profile.name}. All rights reserved.</div>
               <div className="text-xs mt-2">Built with <span className="text-red-500">♥</span> using React, Tailwind CSS, and Framer Motion.</div>
             </footer>
           </main>
         </div>
-      )}
     </>
   );
 }
 
 function App() {
   return (
-    <ThemeProvider>
+    <ProfileProvider>
       <AdminProvider>
         <NavbarProvider>
           <AppContent />
         </NavbarProvider>
       </AdminProvider>
-    </ThemeProvider>
+    </ProfileProvider>
   );
 }
 

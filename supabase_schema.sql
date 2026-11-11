@@ -58,3 +58,17 @@ create policy "Allow update for project-images"
 create policy "Allow delete for project-images"
   on storage.objects for delete
   using ( bucket_id = 'project-images' );
+
+-- Profil publik. Ganti alamat email di bawah dengan email akun Supabase Auth admin.
+-- Buat akun tersebut di Authentication > Users terlebih dahulu.
+create table if not exists public.portfolio_profile (
+  id integer primary key check (id = 1),
+  content jsonb not null default '{}'::jsonb
+);
+alter table public.portfolio_profile enable row level security;
+drop policy if exists "Public read portfolio profile" on public.portfolio_profile;
+create policy "Public read portfolio profile" on public.portfolio_profile for select to anon, authenticated using (true);
+drop policy if exists "Admin write portfolio profile" on public.portfolio_profile;
+create policy "Admin write portfolio profile" on public.portfolio_profile for all to authenticated
+  using ((auth.jwt() ->> 'email') = 'GANTI_DENGAN_EMAIL_ADMIN')
+  with check ((auth.jwt() ->> 'email') = 'GANTI_DENGAN_EMAIL_ADMIN');

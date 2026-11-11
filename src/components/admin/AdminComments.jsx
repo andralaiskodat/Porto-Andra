@@ -267,6 +267,7 @@ const AdminComments = ({ isOpen, onClose, onNavigate }) => {
 
           {/* Navigation View Switcher */}
           <div className="flex items-center bg-slate-800/80 p-1 rounded-xl border border-slate-700/60">
+            <button onClick={() => onNavigate && onNavigate('profile')} className="px-4 py-2 rounded-lg text-slate-300 hover:text-cyan-400 hover:bg-slate-800 transition-colors">👤 Profil</button>
             <button
               onClick={() => onNavigate && onNavigate('projects')}
               className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white transition-all"
