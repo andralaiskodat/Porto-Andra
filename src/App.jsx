@@ -20,15 +20,6 @@ import { ProfileProvider, useProfile } from './contexts/ProfileContext';
 
 function AppContent() {
   const { profile } = useProfile();
-  const [redMode, setRedMode] = useState(() => {
-    try { return localStorage.getItem('portfolioColorMode') === 'red'; } catch { return false; }
-  });
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('red-mode', redMode);
-    try { localStorage.setItem('portfolioColorMode', redMode ? 'red' : 'cyberpunk'); } catch { /* Storage is optional. */ }
-    return () => document.documentElement.classList.remove('red-mode');
-  }, [redMode]);
 
   // Inisialisasi Lenis smooth scroll untuk navigasi super halus tanpa patah-patah
   useEffect(() => {
@@ -70,19 +61,11 @@ function AppContent() {
 
   return (
     <>
-      {/* Color mode and 3D controls */}
+      {/* Floating Theme Quick-Switch Widget (Accessible on both themes) */}
       <div className="fixed top-24 right-4 z-50 flex items-center gap-2">
-        <button type="button" onClick={() => setRedMode(mode => !mode)} aria-pressed={redMode}
-          aria-label={redMode ? 'Aktifkan tema cyberpunk biru' : 'Aktifkan tema merah'}
-          title={redMode ? 'Ganti ke cyberpunk biru' : 'Ganti ke mode merah'}
-          className="color-mode-toggle flex items-center gap-2 rounded-full border border-cyan-400 bg-slate-950/90 px-3 py-2 text-xs font-semibold text-cyan-200 shadow-lg backdrop-blur-sm transition hover:scale-105">
-          <span aria-hidden="true" className="color-mode-dot h-2.5 w-2.5 rounded-full bg-cyan-400" />
-          {redMode ? 'RED' : 'CYBER'}
-        </button>
 
           <button
             onClick={toggle3dAssets}
-            data-color-control="true"
             title={`Toggle 3D Assets (${is3dEnabled ? 'On' : 'Off'})`}
             className={`p-2.5 rounded-full border backdrop-blur-sm transition-all duration-300 ease-in-out hover:scale-110
               ${is3dEnabled
@@ -96,7 +79,7 @@ function AppContent() {
         <div className="relative min-h-screen bg-[#060010] overflow-x-hidden">
           {/* LAPISAN 1: BACKGROUND ANIMASI FIXED (Mengurangi beban GPU secara drastis untuk scroll yang sangat halus) */}
           <div className="fixed inset-0 z-0 pointer-events-none">
-            <Squares speed={0.3} squareSize={40} direction="diagonal" borderColor={redMode ? "rgba(195, 25, 35, 0.12)" : "rgba(255, 255, 255, 0.03)"} hoverFillColor={redMode ? "rgba(180, 0, 20, 0.4)" : "rgba(31, 137, 187, 0.53)"} />
+            <Squares speed={0.3} squareSize={40} direction="diagonal" borderColor="rgba(255, 255, 255, 0.03)" hoverFillColor="rgba(31, 137, 187, 0.53)" />
           </div>
 
           {/* HEADER FIXED DI ATAS MAIN */}
@@ -113,7 +96,7 @@ function AppContent() {
                   <span style={{ display: 'block', marginTop: '0.4em' }}>PORTFOLIO</span>
                 </motion.h1>
                 <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}>
-                  <GradientText colors={redMode ? ["#ed202d", "#9e0612", "#ff343e", "#9e0612", "#ed202d"] : ["#40f2ffff", "#4079ff", "#40fffcff", "#4079ff", "#40f9ffff"]} animationSpeed={3} className="custom-class font-cascadia font-bold" />
+                  <GradientText colors={["#40f2ffff", "#4079ff", "#40fffcff", "#4079ff", "#40f9ffff"]} animationSpeed={3} className="custom-class font-cascadia font-bold" />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.55, ease: "easeOut" }}>
                   <TextGenerateEffect words={profile.heroDescription} />
