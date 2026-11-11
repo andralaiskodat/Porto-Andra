@@ -10,7 +10,7 @@ const Skills = () => {
       {skillsList.map((skill) => (
         <div
           key={skill}
-          className="px-5 py-2 text-sm text-white transition-all duration-300 ease-in-out border rounded-full cursor-pointer border-white/20 bg-white/10 backdrop-blur-sm hover:bg-white/20"
+          className="px-5 py-2 2xl:px-6 2xl:py-3 text-sm 2xl:text-base text-white transition-all duration-300 ease-in-out border rounded-full cursor-pointer border-white/20 bg-white/10 backdrop-blur-sm hover:bg-white/20"
         >
           {skill}
         </div>

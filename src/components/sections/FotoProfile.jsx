@@ -68,7 +68,7 @@ const FotoProfile = () => {
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="relative w-72 h-80 md:w-[370px] md:h-[450px] lg:w-[410px] lg:h-[500px] rounded-2xl overflow-hidden cursor-pointer"
+        className="relative w-72 h-80 md:w-[370px] md:h-[450px] lg:w-[410px] lg:h-[500px] xl:w-[460px] xl:h-[550px] 2xl:w-[520px] 2xl:h-[620px] rounded-2xl overflow-hidden cursor-pointer"
         style={{
           transform: `rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) scale(${isHovered ? 1.02 : 1})`,
           transition: isHovered ? 'transform 0.1s ease' : 'transform 0.6s ease',

@@ -86,12 +86,12 @@ function AppContent() {
           <Header />
 
           {/* MAIN CONTENT */}
-          <main className="relative z-10 px-8 max-w-7xl mx-auto">
+          <main className="relative z-10 px-5 sm:px-8 xl:px-12 max-w-[1600px] mx-auto">
             {/* BAGIAN HERO */}
-            <section id="home" className="flex flex-col md:flex-row items-center gap-10 pt-40 pb-16 lg:pt-40 lg:pb-20">
+            <section id="home" className="flex flex-col md:flex-row items-center gap-10 xl:gap-16 2xl:gap-24 pt-32 pb-16 lg:pt-40 lg:pb-24">
               {/* Blok Teks */}
               <div className="flex-1 text-white space-y-6 pt-10 md:pt-18 order-last md:order-none">
-                <motion.h1 initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.25, ease: "easeOut" }} className="text-4xl md:text-4xl font-moderniz font-bold leading-tight select-none" style={{ color: "#00ffdc", textShadow: `2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc` }}>
+                <motion.h1 initial={{ opacity: 0, x: -60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.25, ease: "easeOut" }} className="text-4xl md:text-4xl xl:text-5xl 2xl:text-6xl font-moderniz font-bold leading-tight select-none" style={{ color: "#00ffdc", textShadow: `2px 2px 0 #000754, 4px 4px 0 #4079ff, 0 4px 12px #40ffaa, 0 1px 0 #00ffdc` }}>
                   WELCOME TO MY
                   <span style={{ display: 'block', marginTop: '0.4em' }}>PORTFOLIO</span>
                 </motion.h1>
@@ -99,7 +99,7 @@ function AppContent() {
                   <GradientText colors={["#40f2ffff", "#4079ff", "#40fffcff", "#4079ff", "#40f9ffff"]} animationSpeed={3} className="custom-class font-cascadia font-bold" />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.55, ease: "easeOut" }}>
-                  <TextGenerateEffect words={profile.heroDescription} />
+                  <TextGenerateEffect words={profile.heroDescription} className="xl:max-w-2xl" />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.7, ease: "easeOut" }}>
                   <Skills />
