@@ -96,7 +96,7 @@ function AppContent() {
         <div className="relative min-h-screen bg-[#060010] overflow-x-hidden">
           {/* LAPISAN 1: BACKGROUND ANIMASI FIXED (Mengurangi beban GPU secara drastis untuk scroll yang sangat halus) */}
           <div className="fixed inset-0 z-0 pointer-events-none">
-            <Squares speed={0.3} squareSize={40} direction="diagonal" borderColor="rgba(255, 255, 255, 0.03)" hoverFillColor="rgba(31, 137, 187, 0.53)" />
+            <Squares speed={0.3} squareSize={40} direction="diagonal" borderColor={redMode ? "rgba(195, 25, 35, 0.12)" : "rgba(255, 255, 255, 0.03)"} hoverFillColor={redMode ? "rgba(180, 0, 20, 0.4)" : "rgba(31, 137, 187, 0.53)"} />
           </div>
 
           {/* HEADER FIXED DI ATAS MAIN */}
@@ -113,7 +113,7 @@ function AppContent() {
                   <span style={{ display: 'block', marginTop: '0.4em' }}>PORTFOLIO</span>
                 </motion.h1>
                 <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}>
-                  <GradientText colors={["#40f2ffff", "#4079ff", "#40fffcff", "#4079ff", "#40f9ffff"]} animationSpeed={3} className="custom-class font-cascadia font-bold" />
+                  <GradientText colors={redMode ? ["#ed202d", "#9e0612", "#ff343e", "#9e0612", "#ed202d"] : ["#40f2ffff", "#4079ff", "#40fffcff", "#4079ff", "#40f9ffff"]} animationSpeed={3} className="custom-class font-cascadia font-bold" />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.55, ease: "easeOut" }}>
                   <TextGenerateEffect words={profile.heroDescription} />

@@ -164,22 +164,21 @@
 }
 
 
-/* Red mode keeps the existing cyberpunk layout and shifts its neon palette. */
-.red-mode body { background-color: #100004; }
-.red-mode main > section,
-.red-mode main > footer,
-.red-mode .fixed.inset-0.z-0,
-.red-mode .fixed.top-0.left-0.w-full { filter: hue-rotate(180deg); }
-/* Preserve photographs, project thumbnails, and uploaded images. */
-.red-mode main > section img,
-.red-mode main > section video,
-.red-mode .fixed.top-0.left-0.w-full img { filter: hue-rotate(180deg); }
-.red-mode .color-mode-toggle {
-  color: #ffc5c5;
-  border-color: #ff555f;
-  background: rgba(24, 3, 8, .95);
-  box-shadow: 0 0 16px rgba(255, 45, 60, .25);
-}
-.red-mode .color-mode-dot { background-color: #ff4b55; }
-.red-mode [data-color-control="true"] { filter: hue-rotate(180deg); }
-.red-mode #root > .relative.min-h-screen { background-color: #100004; }
+
+/* Dark red cyberpunk palette; media retains its original colors. */
+.red-mode body, .red-mode #root > .relative.min-h-screen { background-color: #0c0204; }
+.red-mode .fixed.top-0.left-0.w-full header { background: #100305 !important; border-color: #42090e !important; }
+.red-mode .fixed.top-0.left-0.w-full > div:first-child { background: linear-gradient(90deg, #5e0008, #ed1c24, #8b000c, #ed1c24, #5e0008) !important; filter: drop-shadow(0 10px 18px rgba(207, 0, 15, .35)) !important; }
+.red-mode .fixed.top-0.left-0.w-full h1 { color: #dc1722 !important; }
+.red-mode .fixed.top-0.left-0.w-full h1 + p { color: #f02932 !important; text-shadow: 0 0 7px #9c0010 !important; }
+.red-mode .fixed.top-0.left-0.w-full button { color: #ed2631; }
+.red-mode #home h1, .red-mode #about .font-moderniz[style*="color:"] { color: #ed202d !important; text-shadow: 2px 2px 0 #300005, 4px 4px 0 #74000b, 0 0 14px #ab0714 !important; }
+.red-mode #about .font-moderniz[style*="text-shadow"] { text-shadow: 2px 2px 0 #300005, 4px 4px 0 #74000b, 0 0 14px #ab0714 !important; }
+.red-mode [class*="text-cyan-"] { color: #e73039 !important; }
+.red-mode [class*="border-cyan-"], .red-mode [class*="border-[#00ffdc]"] { border-color: #a90b18 !important; }
+.red-mode [class*="bg-cyan-"] { background-color: rgba(149, 8, 20, .35) !important; }
+.red-mode [class*="from-cyan-"], .red-mode [class*="via-emerald-"], .red-mode [class*="to-cyan-"] { --tw-gradient-from: #a0000d var(--tw-gradient-from-position); --tw-gradient-to: #e71b27 var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), #e71b27, var(--tw-gradient-to); }
+.red-mode [class*="from-[#060010]"] { --tw-gradient-from: #0c0204 var(--tw-gradient-from-position); --tw-gradient-to: rgb(12 2 4 / 0) var(--tw-gradient-to-position); }
+.red-mode .color-mode-toggle { color: #ffd9d9 !important; border-color: #b50a19 !important; background: #200307 !important; box-shadow: 0 0 14px rgba(200, 0, 20, .3); }
+.red-mode .color-mode-dot { background-color: #e51a27 !important; }
+.red-mode [data-color-control="true"] { color: #ed2631 !important; border-color: #ad101c !important; background-color: #260409 !important; box-shadow: 0 0 12px #a0001855 !important; }
