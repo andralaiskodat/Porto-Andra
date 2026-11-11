@@ -3,13 +3,15 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   FaExternalLinkAlt, FaReact, FaNodeJs, FaHtml5, FaCss3Alt, 
-  FaJsSquare, FaTools, FaFigma, FaGithub, FaTimes, FaDownload, FaDatabase, FaLayerGroup
+  FaJsSquare, FaTools, FaFigma, FaGithub, FaTimes, FaDownload, FaDatabase, FaLayerGroup, FaMicrosoft, FaRocket
 } from 'react-icons/fa';
 import { 
   SiTailwindcss, SiNextdotjs, SiVercel, SiMongodb, 
   SiExpress, SiPostgresql, SiTypescript, SiPrisma, SiPusher, SiRedis, SiPython, SiFlask,
-  SiSvelte, SiSpringboot, SiLaravel, SiRust, SiAngular, SiGo, SiVite
+  SiSvelte, SiSpringboot, SiLaravel, SiRust, SiAngular, SiGo, SiVite,
+  SiMysql, SiGitlab, SiJira, SiClaude
 } from 'react-icons/si';
+import { VscVscode } from "react-icons/vsc";
 import { PiCodeBold } from "react-icons/pi";
 import { LuBadge } from "react-icons/lu";
 import { LiaLayerGroupSolid } from "react-icons/lia";
@@ -87,9 +89,16 @@ const techStack = {
   database: [
     { name: "MongoDB", icon: <SiMongodb className="text-[#47A248]" /> },
     { name: "PostgreSQL", icon: <SiPostgresql className="text-[#336791]" /> },
+    { name: "MySQL", icon: <SiMysql className="text-[#F29111]" /> },
   ],
   tools: [
     { name: "Git & GitHub", icon: <FaGithub className="text-white" /> },
+    { name: "GitLab", icon: <SiGitlab className="text-[#FC6D26]" /> },
+    { name: "Microsoft 365", icon: <FaMicrosoft className="text-[#F25022]" /> },
+    { name: "Jira", icon: <SiJira className="text-[#2684FF]" /> },
+    { name: "VS Code", icon: <VscVscode className="text-[#007ACC]" /> },
+    { name: "Antigravity", icon: <FaRocket className="text-[#A78BFA]" /> },
+    { name: "Claude", icon: <SiClaude className="text-[#D97757]" /> },
     { name: "Vercel", icon: <SiVercel className="text-white" /> },
     { name: "Figma", icon: <FaFigma className="text-[#F24E1E]" /> },
     { name: "Tools Lain", icon: <FaTools className="text-gray-400" /> },
