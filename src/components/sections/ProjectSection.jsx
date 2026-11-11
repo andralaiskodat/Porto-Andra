@@ -7,7 +7,8 @@ import {
 } from 'react-icons/fa';
 import { 
   SiTailwindcss, SiNextdotjs, SiVercel, SiMongodb, 
-  SiExpress, SiPostgresql, SiTypescript, SiPrisma, SiPusher, SiRedis, SiPython, SiFlask
+  SiExpress, SiPostgresql, SiTypescript, SiPrisma, SiPusher, SiRedis, SiPython, SiFlask,
+  SiSvelte, SiSpringboot, SiLaravel, SiRust, SiAngular, SiGo, SiVite
 } from 'react-icons/si';
 import { PiCodeBold } from "react-icons/pi";
 import { LuBadge } from "react-icons/lu";
@@ -71,10 +72,17 @@ const techStack = {
     { name: "Tailwind CSS", icon: <SiTailwindcss className="text-[#38B2AC]" /> },
     { name: "HTML5", icon: <FaHtml5 className="text-[#E34F26]" /> },
     { name: "CSS3", icon: <FaCss3Alt className="text-[#1572B6]" /> },
+    { name: "Svelte", icon: <SiSvelte className="text-[#FF3E00]" /> },
+    { name: "Angular", icon: <SiAngular className="text-[#DD0031]" /> },
+    { name: "Vite", icon: <SiVite className="text-[#BD34FE]" /> },
   ],
   backend: [
     { name: "Node.js", icon: <FaNodeJs className="text-[#339933]" /> },
     { name: "Express", icon: <SiExpress className="text-white" /> },
+    { name: "Spring Boot", icon: <SiSpringboot className="text-[#6DB33F]" /> },
+    { name: "Laravel", icon: <SiLaravel className="text-[#FF2D20]" /> },
+    { name: "Rust", icon: <SiRust className="text-[#DEA584]" /> },
+    { name: "Golang", icon: <SiGo className="text-[#00ADD8]" /> },
   ],
   database: [
     { name: "MongoDB", icon: <SiMongodb className="text-[#47A248]" /> },
