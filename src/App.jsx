@@ -20,6 +20,15 @@ import { ProfileProvider, useProfile } from './contexts/ProfileContext';
 
 function AppContent() {
   const { profile } = useProfile();
+  const [redMode, setRedMode] = useState(() => {
+    try { return localStorage.getItem('portfolioColorMode') === 'red'; } catch { return false; }
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('red-mode', redMode);
+    try { localStorage.setItem('portfolioColorMode', redMode ? 'red' : 'cyberpunk'); } catch { /* Storage is optional. */ }
+    return () => document.documentElement.classList.remove('red-mode');
+  }, [redMode]);
 
   // Inisialisasi Lenis smooth scroll untuk navigasi super halus tanpa patah-patah
   useEffect(() => {
@@ -61,11 +70,19 @@ function AppContent() {
 
   return (
     <>
-      {/* Floating Theme Quick-Switch Widget (Accessible on both themes) */}
+      {/* Color mode and 3D controls */}
       <div className="fixed top-24 right-4 z-50 flex items-center gap-2">
+        <button type="button" onClick={() => setRedMode(mode => !mode)} aria-pressed={redMode}
+          aria-label={redMode ? 'Aktifkan tema cyberpunk biru' : 'Aktifkan tema merah'}
+          title={redMode ? 'Ganti ke cyberpunk biru' : 'Ganti ke mode merah'}
+          className="color-mode-toggle flex items-center gap-2 rounded-full border border-cyan-400 bg-slate-950/90 px-3 py-2 text-xs font-semibold text-cyan-200 shadow-lg backdrop-blur-sm transition hover:scale-105">
+          <span aria-hidden="true" className="color-mode-dot h-2.5 w-2.5 rounded-full bg-cyan-400" />
+          {redMode ? 'RED' : 'CYBER'}
+        </button>
 
           <button
             onClick={toggle3dAssets}
+            data-color-control="true"
             title={`Toggle 3D Assets (${is3dEnabled ? 'On' : 'Off'})`}
             className={`p-2.5 rounded-full border backdrop-blur-sm transition-all duration-300 ease-in-out hover:scale-110
               ${is3dEnabled

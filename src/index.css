@@ -163,3 +163,23 @@
   }
 }
 
+
+/* Red mode keeps the existing cyberpunk layout and shifts its neon palette. */
+.red-mode body { background-color: #100004; }
+.red-mode main > section,
+.red-mode main > footer,
+.red-mode .fixed.inset-0.z-0,
+.red-mode .fixed.top-0.left-0.w-full { filter: hue-rotate(180deg); }
+/* Preserve photographs, project thumbnails, and uploaded images. */
+.red-mode main > section img,
+.red-mode main > section video,
+.red-mode .fixed.top-0.left-0.w-full img { filter: hue-rotate(180deg); }
+.red-mode .color-mode-toggle {
+  color: #ffc5c5;
+  border-color: #ff555f;
+  background: rgba(24, 3, 8, .95);
+  box-shadow: 0 0 16px rgba(255, 45, 60, .25);
+}
+.red-mode .color-mode-dot { background-color: #ff4b55; }
+.red-mode [data-color-control="true"] { filter: hue-rotate(180deg); }
+.red-mode #root > .relative.min-h-screen { background-color: #100004; }
